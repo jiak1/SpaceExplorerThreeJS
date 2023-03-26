@@ -5,7 +5,7 @@ on:
     types: [opened, reopened]
 
 jobs:
-  deploy:
+  linting:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: "14"
 
       - run: npm install --frozen-lockfile
       - run: npm run lint
