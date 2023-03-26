@@ -6,3 +6,9 @@ To setup the repo locally:
 npm install
 npm run dev
 ```
+
+# Team
+
+- Jack Donaldson
+- Joshua Karadaghian
+- Michael Ning
