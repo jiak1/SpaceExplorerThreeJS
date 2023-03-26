@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"module": "esnext",
+		//"outDir": "../../dist/client",
+		"baseUrl": ".",
+		"paths": {
+			"three/examples/jsm/libs/dat.gui.module": [
+				"../../node_modules/@types/dat.gui"
+			]
+		},
+		"allowJs": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"isolatedModules": true
+	},
+	"ts-node": {
+		"compilerOptions": {
+			"module": "CommonJS",
+			"target": "es5",
+			"esModuleInterop": true
+		}
+	},
+	"include": ["*", "src/**/*.ts", "src/**/*.js", "src/*"],
+	"exclude": ["node_modules"]
+}
