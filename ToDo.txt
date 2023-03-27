@@ -1,0 +1,32 @@
+Sprint 1
+
+Josh - Movement Controller (WASD) 
+Josh - Movement Controller (Controller)
+Josh - Weponary 
+Jack - Planet Renderer
+Jack - Planet Property Generator 
+Jack - Solar System Builder
+Michael - Asteroid Builder 
+Michael - Asteroid Group Caller
+Josh - Space Ship Creator (or find online)
+Josh - Model Changer / Colour changer 
+Michael - Skybox & Deployer 
+Michael - Pause Function (Which links to dat.gui)
+
+Sprint 2 
+Michael - Asteroid Terrain Destruction (Rely on Weponary)
+Jack - Planet Terrain 'Destruction', calls particles 
+Josh - Movement Abilities (Boost, Barrel Roll, Handbrake, Self Destruct)
+ALL - Clean, Improve, Uplift 
+
+
+
+
+
+
+High Level Description: 
+
+Skybox, asteroids, planets and a ship. Ship can move and interact 
+with surrounds via weapons. Game can be paused and skin can be 
+changed. 
+Planets vary and asteroids form in groups.
