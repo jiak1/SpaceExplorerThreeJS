@@ -1,17 +1,14 @@
 import * as THREE from "three"
 import { scene } from "../renderer/renderer"
+import { createPlanet } from "./planet"
 
-let cube: THREE.Mesh
+const planets: THREE.Mesh[] = []
 
 const setupObjects = () => {
-  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry()
-  const material: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-  })
+  const planet = createPlanet()
+  scene.add(planet)
 
-  cube = new THREE.Mesh(geometry, material)
-  scene.add(cube)
+  planets.push(planet)
 }
 
-export { setupObjects, cube }
+export { setupObjects, planets }

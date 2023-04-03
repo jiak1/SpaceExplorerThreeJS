@@ -33,7 +33,8 @@ const setupRenderer = () => {
 
   controls = new OrbitControls(camera, renderer.domElement)
 
-  camera.position.z = 2
+  camera.position.x = 15
+  camera.position.y = 10
 
   window.addEventListener("resize", onWindowResize, false)
 }
