@@ -2,7 +2,7 @@ const path = require("path")
 
 module.exports = {
   mode: "development",
-  entry: "./src/index.ts",
+  entry: "./src/run.ts",
   devtool: "eval-source-map",
   devServer: {
     static: {
