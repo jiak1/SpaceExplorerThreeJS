@@ -1,18 +1,24 @@
-import { planets } from "../objects/objects"
 import { controls, render } from "../renderer/renderer"
 import { stats } from "../gui/gui"
+import { animatePlanet } from "./planet"
+import { animateShip } from "./ship"
+import { setupKeyboardTracking } from "./util/keyboard"
 
-const setupAnimate = () => {
-  requestAnimationFrame(setupAnimate)
-
+const animate = () => {
+  requestAnimationFrame(animate)
   controls.update()
 
-  const planetMat = planets[0].material as THREE.ShaderMaterial
-  planetMat.uniforms.time.value += 0.1
+  animateShip()
+  animatePlanet()
 
   render()
 
   stats.update()
+}
+
+const setupAnimate = () => {
+  setupKeyboardTracking()
+  animate()
 }
 
 export { setupAnimate }
