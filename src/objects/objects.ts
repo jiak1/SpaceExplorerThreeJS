@@ -1,14 +1,11 @@
-import * as THREE from "three"
-import { scene } from "../renderer/renderer"
-import { createPlanet } from "./planet"
-
-const planets: THREE.Mesh[] = []
+import { setupPlanets } from "./planet"
+import { setupShip } from "./ship"
+import { setupSkybox } from "./skybox"
 
 const setupObjects = () => {
-  const planet = createPlanet()
-  scene.add(planet)
-
-  planets.push(planet)
+  setupPlanets()
+  setupShip()
+  setupSkybox()
 }
 
-export { setupObjects, planets }
+export { setupObjects }

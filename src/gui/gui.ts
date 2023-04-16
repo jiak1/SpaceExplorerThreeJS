@@ -1,10 +1,10 @@
 import { GUI } from "dat.gui"
 import Stats from "three/examples/jsm/libs/stats.module"
 import { camera } from "../renderer/renderer"
-import { planets } from "../objects/objects"
+import { planets } from "../objects/planet"
 
-let stats
-let gui
+let stats: Stats
+let gui: GUI
 
 const setupGUI = () => {
   stats = Stats()

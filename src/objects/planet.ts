@@ -1,4 +1,7 @@
 import * as THREE from "three"
+import { scene } from "../renderer/renderer"
+
+const planets: THREE.Mesh[] = []
 
 const planetShader = {
   uniforms: {
@@ -119,4 +122,11 @@ const createPlanet = () => {
   return new THREE.Mesh(geometry, planetMaterial)
 }
 
-export { createPlanet }
+const setupPlanets = () => {
+  const planet = createPlanet()
+  scene.add(planet)
+
+  planets.push(planet)
+}
+
+export { setupPlanets, planets }
