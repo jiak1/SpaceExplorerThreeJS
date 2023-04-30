@@ -1,7 +1,39 @@
 import * as THREE from "three"
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
 import { scene } from "../renderer/renderer"
 
 let ship: THREE.Mesh
+/*
+const loader = new OBJLoader()
+loader.load(
+  "models/ship.obj",
+  (ShipObject) => {
+    scene.add(ShipObject)
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("An error happened")
+  }
+)
+*/
+const loader = new OBJLoader()
+loader.load(
+  "models/ship.obj",
+	function ( object ) {
+
+		scene.add( object )
+
+	},
+  function ( xhr ) {
+    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' )
+  },
+
+  function ( error ) {
+    console.log( 'An error happened' )
+  }
+  )
 
 const setupShip = () => {
   const shipMat = new THREE.MeshBasicMaterial()

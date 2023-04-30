@@ -4,6 +4,7 @@ import { camera } from "../renderer/renderer"
 import { keyboardKeys } from "./util/keyboard"
 import { skybox } from "../objects/skybox"
 
+/*
 const clock = new THREE.Clock()
 
 export const animateShip = () => {
@@ -51,3 +52,4 @@ export const animateShip = () => {
 
   skybox.position.set(ship.position.x, ship.position.y, ship.position.z)
 }
+*/
