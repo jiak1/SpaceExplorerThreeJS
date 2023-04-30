@@ -20,7 +20,7 @@ loader.load(
 */
 const loader = new OBJLoader()
 loader.load(
-  "models/ship.obj",
+  "dist/ship.obj",
 	function ( object ) {
 
 		scene.add( object )
@@ -32,8 +32,8 @@ loader.load(
 
   function ( error ) {
     console.log( 'An error happened' )
-  }
-  )
+}
+)
 
 const setupShip = () => {
   const shipMat = new THREE.MeshBasicMaterial()
