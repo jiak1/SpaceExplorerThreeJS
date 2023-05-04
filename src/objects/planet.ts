@@ -1,14 +1,24 @@
 import * as THREE from "three"
 import { scene } from "../renderer/renderer"
+import { getRandomFloat, getRandomInt } from "./util/random"
 
 const planets: THREE.Mesh[] = []
 
 const planetShader = {
   uniforms: {
-    time: { type: "f", value: 0.0 },
     scale: { type: "f", value: 0.45 },
     amplitude: { type: "f", value: 1 },
-    octaves: { type: "i", value: 6 },
+    octaves: { type: "i", value: 4 },
+    offset: { type: "v2", value: new THREE.Vector2(0, 0) },
+    colors: {
+      type: "v3v",
+      value: [
+        new THREE.Vector3(20, 161, 43),
+        new THREE.Vector3(48, 204, 48),
+        new THREE.Vector3(28, 97, 232),
+        new THREE.Vector3(38, 69, 199),
+      ],
+    },
   },
 
   vertexShader: `
@@ -23,10 +33,13 @@ const planetShader = {
   `,
 
   fragmentShader: `
-		uniform float time;
     uniform float scale;
 		uniform float amplitude;
 		uniform int octaves;
+
+    uniform vec2 offset;
+
+    uniform vec3 colors[4];
 
     varying vec2 vUv;
 
@@ -58,21 +71,20 @@ const planetShader = {
       float amp = amplitude;
       float frequency = 1.0;
       float sum = 0.0;
-
+    
       for (int i = 0; i < octaves; i++) {
-        sum += amp * noise2D(p * frequency);
+        sum += amp * noise2D(p * frequency + offset);
         amp *= PERSISTENCE;
         frequency *= LACUNARITY;
       }
-
+    
       return sum;
-    }
+    }    
 
     void main() {
 			float n = 0.0;
 		
-			vec2 uv = vUv;
-			float time = time * 0.25;
+			vec2 uv = vUv + offset;
 		
 			// Adjust the UV coordinates for each face to overlap with the adjacent faces
 			if (uv.x == 0.0) {
@@ -85,7 +97,7 @@ const planetShader = {
 				uv.y = 0.0;
 			}
 		
-			vec2 p = uv;
+			vec2 p = vUv;
 		
 			// Generate the Perlin noise texture
 			for (int i = 0; i < octaves; i++) {
@@ -93,40 +105,75 @@ const planetShader = {
 			}
 		
 			// Remap noise values to mountain and hole heights
-			float mountainHeight = mix(0.0, 1.0, n);
-			float holeHeight = mix(-0.5, 0.0, n);
-			float height = mix(mountainHeight, holeHeight, n);
+			float height = n;
 		
 			// Map the height to colors
 			vec3 color = vec3(0.0);
-			if (height > 0.0) {
-				color = vec3(0.5, 0.25, 0.0) + height * vec3(0.5, 0.75, 1.0);
-			} else {
-				color = vec3(0.19, 0.8, 0.19) * vec3(1.0, 1.0, 1.0);
-			}
+			if (height > 0.15) {
+        color = colors[0]/255.0;
+      } else if (height > 0.1) {
+        color = colors[1]/255.0;
+      } else if (height > -0.2) {
+        color = colors[2]/255.0;
+      } else {
+        color = colors[3]/255.0;
+      }      
 		
 			gl_FragColor = vec4(color, 1.0);
 		}
   `,
 }
 
-const createPlanet = () => {
-  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(10, 10, 10)
+const planetColours = [
+  [new THREE.Vector3(20, 161, 43), new THREE.Vector3(48, 204, 48)],
+  [new THREE.Vector3(28, 97, 232), new THREE.Vector3(38, 69, 199)],
+  [new THREE.Vector3(97, 12, 84), new THREE.Vector3(163, 21, 140)],
+]
 
+const getColourPair = () =>
+  planetColours[getRandomInt(0, planetColours.length - 1)]
+
+const createPlanet = () => {
+  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(100, 100, 100)
+
+  // Create a new shader material for the face
   const planetMaterial = new THREE.ShaderMaterial({
     uniforms: planetShader.uniforms,
     vertexShader: planetShader.vertexShader,
     fragmentShader: planetShader.fragmentShader,
   })
 
-  return new THREE.Mesh(geometry, planetMaterial)
+  planetMaterial.uniforms.colors.value = [
+    ...getColourPair(),
+    ...getColourPair(),
+  ]
+
+  planetMaterial.uniforms.amplitude.value = getRandomFloat(0.5, 3)
+
+  planetMaterial.uniforms.offset.value = new THREE.Vector2(
+    getRandomInt(-1000000, 1000000),
+    getRandomInt(-1000000, 1000000)
+  )
+
+  // Create a mesh with the box geometry and the array of materials
+  return new THREE.Mesh(geometry, planetMaterial.clone())
 }
 
 const setupPlanets = () => {
-  const planet = createPlanet()
-  scene.add(planet)
+  const dist_apart = 150
+  const angle = (2 * Math.PI) / 5
+  for (let i = 1; i <= 5; i++) {
+    const x = i * dist_apart * Math.cos(i * angle)
+    const y = i * dist_apart * Math.sin(i * angle)
 
-  planets.push(planet)
+    const planet = createPlanet()
+
+    planet.position.x = x
+    planet.position.z = y
+
+    scene.add(planet)
+    planets.push(planet)
+  }
 }
 
 export { setupPlanets, planets }

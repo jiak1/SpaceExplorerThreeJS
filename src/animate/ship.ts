@@ -5,8 +5,11 @@ import { keyboardKeys } from "./util/keyboard"
 import { skybox } from "../objects/skybox"
 
 const clock = new THREE.Clock()
+let fixedCamera = true
 
-export const animateShip = () => {
+const updateFixedCamera = (newVal) => (fixedCamera = newVal)
+
+const animateShip = () => {
   const seconds = clock.getDelta() // seconds - speed to move .
   const moveDistance = 200 * seconds // Pixels per sec
 
@@ -42,12 +45,16 @@ export const animateShip = () => {
     ship.rotation.set(0, 0, 0)
   }
 
-  const camDistance = new THREE.Vector3(0, 75, 250) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
-  const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
-  camera.position.x = camFollowDist.x
-  camera.position.y = camFollowDist.y
-  camera.position.z = camFollowDist.z
-  camera.lookAt(ship.position)
+  if (fixedCamera) {
+    const camDistance = new THREE.Vector3(0, 75, 250) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
+    const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
+    camera.position.x = camFollowDist.x
+    camera.position.y = camFollowDist.y
+    camera.position.z = camFollowDist.z
+    camera.lookAt(ship.position)
+  }
 
   skybox.position.set(ship.position.x, ship.position.y, ship.position.z)
 }
+
+export { fixedCamera, updateFixedCamera, animateShip }

@@ -7,7 +7,11 @@ function createMaterialArray() {
   const materialArray = [...Array(6)].map(() => {
     const texture = new THREE.TextureLoader().load("textures/space.jpg")
 
-    return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide })
+    return new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.BackSide,
+      wireframe: true,
+    })
   })
   return materialArray
 }
