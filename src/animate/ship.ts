@@ -42,7 +42,7 @@ export const animateShip = () => {
     ship.rotation.set(0, 0, 0)
   }
 
-  const camDistance = new THREE.Vector3(0, 50, 100) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
+  const camDistance = new THREE.Vector3(0, 15, 40) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
   const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
   camera.position.x = camFollowDist.x
   camera.position.y = camFollowDist.y

@@ -37,6 +37,9 @@ const setupRenderer = () => {
   camera.position.y = 10
 
   window.addEventListener("resize", onWindowResize, false)
+
+  const light = new THREE.AmbientLight(0xffc0cb, 1) // soft white light
+  scene.add(light)
 }
 
 export { setupRenderer, camera, renderer, scene, controls, render }

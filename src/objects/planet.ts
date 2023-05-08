@@ -111,7 +111,7 @@ const planetShader = {
 }
 
 const createPlanet = () => {
-  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(1, 1, 1)
+  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(100, 100, 100) // planet size changer
 
   const planetMaterial = new THREE.ShaderMaterial({
     uniforms: planetShader.uniforms,
