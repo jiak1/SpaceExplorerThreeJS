@@ -1,30 +1,20 @@
 import * as THREE from "three"
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { scene } from "../renderer/renderer"
 
-const textureLoader = new THREE.TextureLoader()
-const texture = textureLoader.load("textures/uv_map.png")
-const model = "textures/ship.obj"
-
-const material = new THREE.MeshBasicMaterial({
-  map: texture,
-})
-
+const model = "textures/spaceship.glb"
 let ship: THREE.Group
 
-const loader = new OBJLoader() // Loader for model with error logging
+const loader = new GLTFLoader()
 loader.load(
   model,
-  (ShipObject) => {
-    ShipObject.position.set(0, 25, 0)
-    ship = ShipObject
-    scene.add(ShipObject)
-    console.log(ship)
+  (gltf) => {
+    gltf.scene.position.set(0, 25, 0)
+    ship = gltf.scene
+    scene.add(gltf.scene)
     const shipMesh = ship.children[0] as THREE.Mesh
-    shipMesh.material = material
-    // new THREE.MeshBasicMaterial({ color: "#345" })
-    // shipMesh.rotateX(Math.PI)
-    shipMesh.rotateX(1.6)
+    shipMesh.material = new THREE.MeshBasicMaterial({ color: "#ADD8E6" })
+    shipMesh.rotateZ(Math.PI)
   },
   (xhr) => {
     console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`)
@@ -33,17 +23,7 @@ loader.load(
     console.log("An error happened")
   }
 )
-// const uvTexture = new THREE.TextureLoader().load("textures/ship2.png")
-const setupShip = () => {
-  /* const shipGeo = new THREE.BoxGeometry(10, 10, 10, 1, 1, 1)
-  const shipMat = new THREE.MeshBasicMaterial({
-    map: uvTexture,
-  })
 
-  ship = new THREE.Mesh(shipGeo, shipMat)
-  ship.position.set(0, 25.1, 0)
-
-  scene.add(ship) */
-}
+const setupShip = () => { }
 
 export { setupShip, ship }

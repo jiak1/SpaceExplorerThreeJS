@@ -41,7 +41,17 @@ export const animateShip = () => {
     ship.position.set(0, 25, 0) // Y needs to be 25 or cube will sink into ground
     ship.rotation.set(0, 0, 0)
   }
-
+  /*
+    window.addEventListener("gamepadconnected", (e) => {
+      console.log(
+        "Gamepad connected at index %d: %s. %d buttons, %d axes.",
+        e.gamepad.index,
+        e.gamepad.id,
+        e.gamepad.buttons.length,
+        e.gamepad.axes.length
+      )
+    })
+  */
   const camDistance = new THREE.Vector3(0, 15, 40) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
   const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
   camera.position.x = camFollowDist.x

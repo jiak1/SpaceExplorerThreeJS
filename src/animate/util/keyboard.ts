@@ -6,8 +6,6 @@ const setupKeyboardTracking = () => {
   document.body.addEventListener("keyup", (e) => (keyboardKeys[e.key] = false))
 }
 
-export { setupKeyboardTracking, keyboardKeys }
-
 const listener = new GamepadListener({
   analog: false,
   deadZone: 0.3,
@@ -21,3 +19,5 @@ listener.on("gamepad:button", (event) => {
   } = event.detail
 })
 listener.start()
+
+export { setupKeyboardTracking, keyboardKeys }
