@@ -1,5 +1,0 @@
-import * as THREE from "three"
-import { ship } from "../objects/ship"
-import { camera } from "../renderer/renderer"
-import { keyboardKeys } from "./util/keyboard"
-import { skybox } from "../objects/skybox"

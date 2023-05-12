@@ -48,3 +48,13 @@ Controller Support
 Skybox 
 Cube Ship Model 
 Shooting (if poss) 
+
+
+
+Week ? : 
+
+Dat Gui Josh to Do: 
+- Ship speed
+- Skybox Colour
+- Thruster Particle effects
+- Ship Model

@@ -6,6 +6,35 @@ import { skybox } from "../objects/skybox"
 
 const clock = new THREE.Clock()
 
+// Create the smoke particle material
+const particleMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00 })
+const smokeParticles = []
+
+// Create a smoke particle emitter
+for (let i = 0; i < 100; i++) {
+  const particle = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 32, 32),
+    particleMaterial
+  )
+  particle.position
+    .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
+    .normalize()
+  particle.position.multiplyScalar(Math.random() * 10)
+  particle.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2)
+  smokeParticles.push(particle)
+}
+
+// Update the smoke particles
+function animate() {
+  requestAnimationFrame(animate)
+
+  for (let i = 0; i < smokeParticles.length; i++) {
+    smokeParticles[i].rotation.x += 0.01
+    smokeParticles[i].rotation.y += 0.01
+    smokeParticles[i].rotation.z += 0.01
+  }
+}
+
 // Gamepad input state
 const gamepadState = {
   forward: false,
@@ -18,22 +47,20 @@ const gamepadState = {
   rotDown: false,
   rollLeft: false,
   rollRight: false,
-  pause: false,
 }
 
-// Gamepad button mappings (adjust as needed)
+// Gamepad button mappings (example mappings, adjust as needed)
 const buttonMappings = {
-  7: "forward", // R2
-  6: "backward", // L2
-  0: "up", // X button
-  1: "down", // O button
-  14: "rotLeft", // Left bumper
-  15: "rotRight", // Right bumper
-  13: "rotUp", // Left trigger
-  12: "rotDown", // Right trigger
-  4: "rollLeft", // Back button
-  5: "rollRight", // Start button
-  9: "pause", // Options Button
+  0: "forward", // A button
+  1: "backward", // B button
+  2: "up", // X button
+  3: "down", // Y button
+  4: "rotLeft", // Left bumper
+  5: "rotRight", // Right bumper
+  6: "rotUp", // Left trigger
+  7: "rotDown", // Right trigger
+  8: "rollLeft", // Back button
+  9: "rollRight", // Start button
 }
 
 export const animateShip = () => {
@@ -75,7 +102,7 @@ export const animateShip = () => {
     ship.rotateOnAxis(new THREE.Vector3(0, 0, 1), -cubeRotator) // ROLL
 
   // RESET
-  if (keyboardKeys.z || gamepadState.pause) {
+  if (keyboardKeys.z) {
     ship.position.set(0, 25, 0) // Y needs to be 25 or cube will sink into ground
     ship.rotation.set(0, 0, 0)
   }

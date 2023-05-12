@@ -20,7 +20,7 @@ const setupSkybox = () => {
       new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide })
   )
 
-  const skyboxGeo = new THREE.BoxGeometry(1000, 1000, 1000)
+  const skyboxGeo = new THREE.BoxGeometry(5000, 5000, 5000)
   skybox = new THREE.Mesh(skyboxGeo, materials)
 
   scene.add(skybox)
