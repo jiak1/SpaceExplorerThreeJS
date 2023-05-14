@@ -6,7 +6,7 @@ let planets: THREE.Mesh[] = []
 
 const planetShader = {
   uniforms: {
-    scale: { type: "f", value: 0.0015 },
+    scale: { type: "f", value: 0.0005 },
     amplitude: { type: "f", value: 1 },
     octaves: { type: "i", value: 5 },
     offset: { type: "v2", value: new THREE.Vector2(0, 0) },
@@ -161,7 +161,12 @@ const getColours = () =>
   planetColours[getRandomInt(0, planetColours.length - 1)]
 
 const createPlanet = () => {
-  const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(100, 100, 100)
+  const size = getRandomInt(60, 300)
+  const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(
+    size,
+    size,
+    size
+  )
 
   // Create a new shader material for the face
   const planetMaterial = new THREE.ShaderMaterial({

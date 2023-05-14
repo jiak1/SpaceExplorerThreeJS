@@ -18,6 +18,22 @@ function onWindowResize() {
   render()
 }
 
+const setupSkybox = () => {
+  const textureLoader = new THREE.CubeTextureLoader()
+
+  const textures = [
+    "textures/corona_ft.png",
+    "textures/corona_bk.png",
+    "textures/corona_up.png",
+    "textures/corona_dn.png",
+    "textures/corona_rt.png",
+    "textures/corona_lf.png",
+  ]
+
+  const textureCube = textureLoader.load(textures)
+  scene.background = textureCube
+}
+
 const setupRenderer = () => {
   scene = new THREE.Scene()
 
@@ -40,6 +56,11 @@ const setupRenderer = () => {
   objectsGroup = new THREE.Group()
 
   window.addEventListener("resize", onWindowResize, false)
+
+  const light = new THREE.AmbientLight(0xffc0cb, 1) // soft white light
+  scene.add(light)
+
+  setupSkybox()
 }
 
 export {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { controls, render } from "../renderer/renderer"
 import { stats } from "../gui/gui"
 import { animatePlanet, setupPlanetAnimation } from "./planet"

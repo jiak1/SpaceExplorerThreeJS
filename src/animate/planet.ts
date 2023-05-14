@@ -19,7 +19,7 @@ const animatePlanet = () => {
   totalTime += clock.getDelta() * rotateSpeed
 
   if (planets) {
-    const dist_apart = 200
+    const dist_apart = 350
     const min_dist = 2
 
     for (let i = 1; i <= planets.length; i++) {
