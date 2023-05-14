@@ -24,6 +24,6 @@ loader.load(
   }
 )
 
-const setupShip = () => {}
+const setupShip = () => { }
 
 export { setupShip, ship }
