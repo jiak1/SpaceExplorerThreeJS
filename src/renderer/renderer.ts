@@ -24,7 +24,7 @@ const setupRenderer = () => {
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    10000
   )
 
   renderer = new THREE.WebGLRenderer()
@@ -37,6 +37,9 @@ const setupRenderer = () => {
   camera.position.y = 10
 
   window.addEventListener("resize", onWindowResize, false)
+
+  const light = new THREE.AmbientLight(0xffc0cb, 1) // soft white light
+  scene.add(light)
 }
 
 export { setupRenderer, camera, renderer, scene, controls, render }
