@@ -125,16 +125,49 @@ const planetShader = {
 }
 
 const planetColours = [
-  [new THREE.Vector3(20, 161, 43), new THREE.Vector3(48, 204, 48)],
-  [new THREE.Vector3(28, 97, 232), new THREE.Vector3(38, 69, 199)],
-  [new THREE.Vector3(97, 12, 84), new THREE.Vector3(163, 21, 140)],
+  [
+    new THREE.Vector3(20, 161, 43),
+    new THREE.Vector3(48, 204, 48),
+    new THREE.Vector3(28, 97, 232),
+    new THREE.Vector3(38, 69, 199),
+  ],
+  [
+    new THREE.Vector3(152, 38, 73),
+    new THREE.Vector3(124, 132, 131),
+    new THREE.Vector3(113, 162, 182),
+    new THREE.Vector3(96, 178, 229),
+  ],
+  [
+    new THREE.Vector3(255, 137, 102),
+    new THREE.Vector3(229, 68, 109),
+    new THREE.Vector3(248, 244, 227),
+    new THREE.Vector3(112, 108, 97),
+  ],
+  [
+    new THREE.Vector3(206, 132, 173),
+    new THREE.Vector3(206, 150, 166),
+    new THREE.Vector3(212, 203, 179),
+    new THREE.Vector3(210, 224, 191),
+  ],
+  [
+    new THREE.Vector3(247, 219, 167),
+    new THREE.Vector3(241, 171, 134),
+    new THREE.Vector3(197, 123, 87),
+    new THREE.Vector3(30, 45, 47),
+  ],
+  [
+    new THREE.Vector3(158, 0, 49),
+    new THREE.Vector3(142, 0, 49),
+    new THREE.Vector3(119, 0, 88),
+    new THREE.Vector3(96, 0, 71),
+  ],
 ]
 
-const getColourPair = () =>
+const getColours = () =>
   planetColours[getRandomInt(0, planetColours.length - 1)]
 
 const createPlanet = () => {
-  const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(100, 100, 100)
+  const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(100, 100, 100)
 
   // Create a new shader material for the face
   const planetMaterial = new THREE.ShaderMaterial({
@@ -143,10 +176,7 @@ const createPlanet = () => {
     fragmentShader: planetShader.fragmentShader,
   })
 
-  planetMaterial.uniforms.colors.value = [
-    ...getColourPair(),
-    ...getColourPair(),
-  ]
+  planetMaterial.uniforms.colors.value = getColours()
 
   planetMaterial.uniforms.amplitude.value = getRandomFloat(0.5, 3)
 
@@ -162,7 +192,7 @@ const createPlanet = () => {
 const setupPlanets = () => {
   const dist_apart = 150
   const angle = (2 * Math.PI) / 5
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 15; i++) {
     const x = i * dist_apart * Math.cos(i * angle)
     const y = i * dist_apart * Math.sin(i * angle)
 

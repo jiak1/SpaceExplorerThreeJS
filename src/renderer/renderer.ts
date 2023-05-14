@@ -24,7 +24,7 @@ const setupRenderer = () => {
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    100000
   )
 
   renderer = new THREE.WebGLRenderer()
