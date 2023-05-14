@@ -5,7 +5,7 @@ import { debounce } from "../util/debounce"
 import { setupAnimate } from "../animate/animate"
 import { setupObjects } from "../objects/objects"
 import { fixedCamera, updateFixedCamera } from "../animate/ship"
-import { camera } from "../renderer/renderer"
+import { camera, toggleOrbitControls } from "../renderer/renderer"
 import { planetCount, updatePlanetCount } from "../objects/planet"
 import { rotateSpeed, updateRotateSpeed } from "../animate/planet"
 
@@ -43,6 +43,7 @@ const setupGUI = () => {
     .listen()
     .onChange((newVal) => {
       updateFixedCamera(newVal)
+      toggleOrbitControls(newVal)
     })
 
   cubeFolder.open()

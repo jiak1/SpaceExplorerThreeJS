@@ -49,6 +49,7 @@ const setupRenderer = () => {
   document.body.appendChild(renderer.domElement)
 
   controls = new OrbitControls(camera, renderer.domElement)
+  controls.enabled = false
 
   camera.position.x = 15
   camera.position.y = 10
@@ -63,6 +64,8 @@ const setupRenderer = () => {
   setupSkybox()
 }
 
+const toggleOrbitControls = (enabled) => (controls.enabled = !enabled)
+
 export {
   setupRenderer,
   camera,
@@ -71,4 +74,5 @@ export {
   controls,
   render,
   objectsGroup,
+  toggleOrbitControls,
 }
