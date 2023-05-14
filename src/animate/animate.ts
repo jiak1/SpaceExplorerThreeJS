@@ -1,6 +1,6 @@
 import { controls, render } from "../renderer/renderer"
 import { stats } from "../gui/gui"
-import { animatePlanet } from "./planet"
+import { animatePlanet, setupPlanetAnimation } from "./planet"
 import { animateShip } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
 
@@ -18,6 +18,7 @@ const animate = () => {
 
 const setupAnimate = () => {
   setupKeyboardTracking()
+  setupPlanetAnimation()
   animate()
 }
 

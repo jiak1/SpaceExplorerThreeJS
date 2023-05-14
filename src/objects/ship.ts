@@ -1,5 +1,5 @@
 import * as THREE from "three"
-import { scene } from "../renderer/renderer"
+import { objectsGroup } from "../renderer/renderer"
 
 let ship: THREE.Mesh
 
@@ -10,7 +10,7 @@ const setupShip = () => {
   ship = new THREE.Mesh(shipGeo, shipMat)
   ship.position.set(0, 25.1, 0)
 
-  scene.add(ship)
+  objectsGroup.add(ship)
 }
 
 export { setupShip, ship }

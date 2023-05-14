@@ -4,6 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 let camera: THREE.PerspectiveCamera
 let renderer: THREE.WebGLRenderer
 let scene: THREE.Scene
+let objectsGroup: THREE.Group
 let controls: OrbitControls
 
 function render() {
@@ -36,7 +37,17 @@ const setupRenderer = () => {
   camera.position.x = 15
   camera.position.y = 10
 
+  objectsGroup = new THREE.Group()
+
   window.addEventListener("resize", onWindowResize, false)
 }
 
-export { setupRenderer, camera, renderer, scene, controls, render }
+export {
+  setupRenderer,
+  camera,
+  renderer,
+  scene,
+  controls,
+  render,
+  objectsGroup,
+}

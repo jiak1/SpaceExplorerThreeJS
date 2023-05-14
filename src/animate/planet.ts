@@ -4,22 +4,26 @@ import { planets } from "../objects/planet"
 
 const clock = new THREE.Clock()
 let totalTime = 0
+let rotateSpeed = 0.1
 
-const offsets = []
+let offsets = []
 
-for (let i = 0; i < 15; i++) {
-  offsets.push(getRandomFloat(0.0, 100.0))
+const setupPlanetAnimation = () => {
+  offsets = []
+  for (let i = 0; i <= planets.length; i++) {
+    offsets.push(getRandomFloat(0.0, 100.0))
+  }
 }
 
-export const animatePlanet = () => {
-  totalTime += clock.getDelta() * 1
+const animatePlanet = () => {
+  totalTime += clock.getDelta() * rotateSpeed
 
   if (planets) {
     const dist_apart = 200
     const min_dist = 2
 
     for (let i = 1; i <= planets.length; i++) {
-      const angle = (2 * Math.PI + totalTime + offsets[i]) / planets.length
+      const angle = (2 * Math.PI + totalTime + offsets[i - 1]) / planets.length
       const planet = planets[i - 1]
 
       const x = (i + min_dist) * dist_apart * Math.cos(i * angle)
@@ -30,3 +34,7 @@ export const animatePlanet = () => {
     }
   }
 }
+
+const updateRotateSpeed = (newSpeed) => (rotateSpeed = newSpeed)
+
+export { animatePlanet, rotateSpeed, updateRotateSpeed, setupPlanetAnimation }

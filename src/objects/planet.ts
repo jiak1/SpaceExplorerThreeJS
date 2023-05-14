@@ -1,14 +1,14 @@
 import * as THREE from "three"
-import { scene } from "../renderer/renderer"
+import { objectsGroup, scene } from "../renderer/renderer"
 import { getRandomFloat, getRandomInt } from "../util/random"
 
-const planets: THREE.Mesh[] = []
+let planets: THREE.Mesh[] = []
 
 const planetShader = {
   uniforms: {
-    scale: { type: "f", value: 0.45 },
+    scale: { type: "f", value: 0.0015 },
     amplitude: { type: "f", value: 1 },
-    octaves: { type: "i", value: 4 },
+    octaves: { type: "i", value: 5 },
     offset: { type: "v2", value: new THREE.Vector2(0, 0) },
     colors: {
       type: "v3v",
@@ -22,13 +22,13 @@ const planetShader = {
   },
 
   vertexShader: `
-    varying vec2 vUv;
+    varying vec3 vPosition;
 
     void main() {
-      vUv = uv;
-
       vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
       gl_Position = projectionMatrix * mvPosition;
+
+      vPosition = position;
     }
   `,
 
@@ -41,39 +41,43 @@ const planetShader = {
 
     uniform vec3 colors[4];
 
-    varying vec2 vUv;
+    varying vec3 vPosition;
 
     #define PERSISTENCE 0.5
     #define LACUNARITY 2.0
 
-    vec2 hash2D(vec2 p) {
-      const vec2 k = vec2(0.3183099, 0.3678794);
-      p = fract(p * k + vec2(0.1, 0.1));
-      p += dot(p, p + vec2(123.4, 567.8));
-      return fract(vec2(p.x * p.y, p.x + p.y));
+    vec3 hash3D(vec3 p) {
+      p = fract(p * 0.3183099 + vec3(0.1, 0.1, 0.1));
+      p += dot(p, p + vec3(123.4, 567.8, 987.6));
+      return fract(vec3(p.x * p.y, p.y * p.z, p.z * p.x));
     }
+    
+    float noise3D(vec3 p) {
+      vec3 i = floor(p);
+      vec3 f = fract(p);
+    
+      vec3 u = f * f * (3.0 - 2.0 * f);
+    
+      float a = dot(hash3D(i + vec3(0.0, 0.0, 0.0)), f - vec3(0.0, 0.0, 0.0));
+      float b = dot(hash3D(i + vec3(1.0, 0.0, 0.0)), f - vec3(1.0, 0.0, 0.0));
+      float c = dot(hash3D(i + vec3(0.0, 1.0, 0.0)), f - vec3(0.0, 1.0, 0.0));
+      float d = dot(hash3D(i + vec3(1.0, 1.0, 0.0)), f - vec3(1.0, 1.0, 0.0));
+      float e = dot(hash3D(i + vec3(0.0, 0.0, 1.0)), f - vec3(0.0, 0.0, 1.0));
+      float g = dot(hash3D(i + vec3(1.0, 0.0, 1.0)), f - vec3(1.0, 0.0, 1.0));
+      float h = dot(hash3D(i + vec3(0.0, 1.0, 1.0)), f - vec3(0.0, 1.0, 1.0));
+      float k = dot(hash3D(i + vec3(1.0, 1.0, 1.0)), f - vec3(1.0, 1.0, 1.0));
+    
+      return mix(mix(mix(a, b, u.x), mix(c, d, u.x), u.y),
+                 mix(mix(e, g, u.x), mix(h, k, u.x), u.y), u.z);
+    }    
 
-    float noise2D(vec2 p) {
-      vec2 i = floor(p);
-      vec2 f = fract(p);
-
-      vec2 u = f * f * (3.0 - 2.0 * f);
-
-      float a = dot(hash2D(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0));
-      float b = dot(hash2D(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0));
-      float c = dot(hash2D(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0));
-      float d = dot(hash2D(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0));
-
-      return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-    }
-
-    float noise(vec2 p) {
+    float noise(vec3 p) {
       float amp = amplitude;
       float frequency = 1.0;
       float sum = 0.0;
     
       for (int i = 0; i < octaves; i++) {
-        sum += amp * noise2D(p * frequency + offset);
+        sum += amp * noise3D(p * frequency + vec3(offset.x, offset.y, float(i)));
         amp *= PERSISTENCE;
         frequency *= LACUNARITY;
       }
@@ -83,21 +87,7 @@ const planetShader = {
 
     void main() {
 			float n = 0.0;
-		
-			vec2 uv = vUv + offset;
-		
-			// Adjust the UV coordinates for each face to overlap with the adjacent faces
-			if (uv.x == 0.0) {
-				uv.x = 1.0;
-			} else if (uv.x == 1.0) {
-				uv.x = 0.0;
-			} else if (uv.y == 0.0) {
-				uv.y = 1.0;
-			} else if (uv.y == 1.0) {
-				uv.y = 0.0;
-			}
-		
-			vec2 p = vUv;
+			vec3 p = vPosition;
 		
 			// Generate the Perlin noise texture
 			for (int i = 0; i < octaves; i++) {
@@ -163,6 +153,10 @@ const planetColours = [
   ],
 ]
 
+let planetCount = 15
+
+const updatePlanetCount = (newVal) => (planetCount = newVal)
+
 const getColours = () =>
   planetColours[getRandomInt(0, planetColours.length - 1)]
 
@@ -190,12 +184,15 @@ const createPlanet = () => {
 }
 
 const setupPlanets = () => {
-  for (let i = 1; i <= 15; i++) {
+  planets = []
+
+  for (let i = 1; i <= planetCount; i++) {
     const planet = createPlanet()
 
-    scene.add(planet)
+    objectsGroup.add(planet)
     planets.push(planet)
   }
+  console.log(planets.length)
 }
 
-export { setupPlanets, planets }
+export { setupPlanets, planets, updatePlanetCount, planetCount }
