@@ -1,6 +1,6 @@
 import * as THREE from "three"
 import { scene } from "../renderer/renderer"
-import { getRandomFloat, getRandomInt } from "./util/random"
+import { getRandomFloat, getRandomInt } from "../util/random"
 
 const planets: THREE.Mesh[] = []
 
@@ -190,16 +190,8 @@ const createPlanet = () => {
 }
 
 const setupPlanets = () => {
-  const dist_apart = 150
-  const angle = (2 * Math.PI) / 5
   for (let i = 1; i <= 15; i++) {
-    const x = i * dist_apart * Math.cos(i * angle)
-    const y = i * dist_apart * Math.sin(i * angle)
-
     const planet = createPlanet()
-
-    planet.position.x = x
-    planet.position.z = y
 
     scene.add(planet)
     planets.push(planet)

@@ -5,7 +5,7 @@ import { keyboardKeys } from "./util/keyboard"
 import { skybox } from "../objects/skybox"
 
 const clock = new THREE.Clock()
-let fixedCamera = true
+let fixedCamera = false
 
 const updateFixedCamera = (newVal) => (fixedCamera = newVal)
 
