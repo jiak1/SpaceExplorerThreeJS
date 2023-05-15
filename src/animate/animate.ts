@@ -1,8 +1,10 @@
+/* eslint-disable import/no-cycle */
 import { controls, render } from "../renderer/renderer"
 import { stats } from "../gui/gui"
-import { animatePlanet } from "./planet"
-import { animateShip } from "./ship"
+import { animatePlanet, setupPlanetAnimation } from "./planet"
+import { animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
+import { animateExplosion } from "./explosion"
 
 const animate = () => {
   requestAnimationFrame(animate)
@@ -10,6 +12,7 @@ const animate = () => {
 
   animateShip()
   animatePlanet()
+  animateExplosion()
 
   render()
 
@@ -18,6 +21,8 @@ const animate = () => {
 
 const setupAnimate = () => {
   setupKeyboardTracking()
+  setupPlanetAnimation()
+  setupShipAnimation()
   animate()
 }
 
