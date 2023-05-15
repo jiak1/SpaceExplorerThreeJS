@@ -6,25 +6,25 @@ let renderer: THREE.WebGLRenderer
 let scene: THREE.Scene
 let controls: OrbitControls
 
-//---------------------PAUSE-------------------------------------------------
+//  ---------------------PAUSE-------------------------------------------------
 // create a clock to keep track of elapsed time
-const clock = new THREE.Clock();
+const clock = new THREE.Clock()
 
 // create a variable to store the pause state
-let isPaused = false;
+let isPaused = false
 
 // add a key listener to toggle the pause state
-window.addEventListener('keydown', (event) => {
-  if (event.key === 'p') {
-    isPaused = !isPaused;
+window.addEventListener("keydown", (event) => {
+  if (event.key === "p") {
+    isPaused = !isPaused
   }
-});
-//---------------------PAUSE-------------------------------------------------
+})
+//  ---------------------PAUSE-------------------------------------------------
 
 function render() {
   if (!isPaused) {
-    const elapsedTime = clock.getElapsedTime();
-    renderer.render(scene, camera);
+    const elapsedTime = clock.getElapsedTime()
+    renderer.render(scene, camera)
   }
 }
 
