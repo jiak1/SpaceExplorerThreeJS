@@ -21,13 +21,13 @@ const animate = () => {
 }
 
 const setupAnimate = () => {
-  setupKeyboardTracking()
-  setupPlanetAnimation()
-  setupShipAnimation()
   if (!animating) {
+    setupKeyboardTracking()
     animate()
     animating = true
   }
+  setupShipAnimation()
+  setupPlanetAnimation()
 }
 
 export { setupAnimate }
