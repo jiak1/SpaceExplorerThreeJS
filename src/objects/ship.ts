@@ -12,8 +12,8 @@ const setupShip = () => {
     (gltf) => {
       gltf.scene.position.set(0, 25, 0)
       ship = gltf.scene
-      objectsGroup.add(ship)
       const shipMesh = ship.children[0] as THREE.Mesh
+      objectsGroup.add(ship)
       shipMesh.material = new THREE.MeshBasicMaterial({ color: "#ADD8E6" })
       shipMesh.rotateZ(Math.PI)
       console.log(ship)

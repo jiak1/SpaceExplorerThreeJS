@@ -4,7 +4,7 @@ import { stats } from "../gui/gui"
 import { animatePlanet, setupPlanetAnimation } from "./planet"
 import { animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
-import { animateExplosion } from "./explosion"
+import { animateExplosion /* animateExhaust */ } from "./explosion"
 
 const animate = () => {
   requestAnimationFrame(animate)
@@ -13,6 +13,7 @@ const animate = () => {
   animateShip()
   animatePlanet()
   animateExplosion()
+  // animateExhaust()
 
   render()
 
