@@ -6,13 +6,14 @@ import { animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
 import { animateExplosion } from "./explosion"
 
+let animating = false
+
 const animate = () => {
   requestAnimationFrame(animate)
-  controls.update()
 
-  animateShip()
   animatePlanet()
   animateExplosion()
+  animateShip()
 
   render()
 
@@ -23,7 +24,10 @@ const setupAnimate = () => {
   setupKeyboardTracking()
   setupPlanetAnimation()
   setupShipAnimation()
-  animate()
+  if (!animating) {
+    animate()
+    animating = true
+  }
 }
 
 export { setupAnimate }

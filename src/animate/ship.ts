@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { triggerExplosion } from "../objects/explosion"
 import { ship } from "../objects/ship"
-import { camera, objectsGroup, scene } from "../renderer/renderer"
+import { camera, controls, objectsGroup, scene } from "../renderer/renderer"
 import { keyboardKeys } from "./util/keyboard"
 
 const raycaster = new THREE.Raycaster()
@@ -97,6 +97,8 @@ const animateMove = () => {
     camera.position.y = camFollowDist.y
     camera.position.z = camFollowDist.z
     camera.lookAt(ship.position)
+  } else {
+    controls.update()
   }
 }
 
