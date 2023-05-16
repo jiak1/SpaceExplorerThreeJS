@@ -54,12 +54,12 @@ let boostTimer = 0
 
 const animateMove = () => {
   if (!isDying) {
-    const moveDistance = (isBoosting ? 600 : 200) * seconds // Pixels per sec, doubled during boost
+    const moveDistance = (isBoosting ? 600 : 200) * seconds // Pixels per sec, 3x during boost
 
     const cubeRotator = (Math.PI / 2) * seconds
 
     // Update gamepad input state
-    const gamepad = navigator.getGamepads()[0] // Assuming only one gamepad is connected
+    const gamepad = navigator.getGamepads()[0]
     if (gamepad) {
       for (let i = 0; i < gamepad.buttons.length; i++) {
         const button = gamepad.buttons[i]
@@ -74,7 +74,6 @@ const animateMove = () => {
     if (gamepadState.boost && !isBoosting) {
       isBoosting = true
       boostTimer = 5 // Set the boost timer to 5 seconds
-      // Apply boost effect here if needed
     }
 
     // Reduce the boost timer by the elapsed time
@@ -82,7 +81,6 @@ const animateMove = () => {
       boostTimer -= seconds
       if (boostTimer <= 0) {
         isBoosting = false
-        // Remove boost effect here if needed
       }
     }
 

@@ -1,4 +1,5 @@
 import * as THREE from "three"
+// eslint-disable-next-line prettier/prettier
 import { triggerExplosion, updateParticles, triggerExhaust } from "../objects/explosion"
 
 const clock = new THREE.Clock()

@@ -1,32 +1,33 @@
 Sprint 1
 
-Josh - Movement Controller (WASD) 
-Josh - Movement Controller (Controller)
-Josh - Weponary 
-Jack - Planet Renderer
-Jack - Planet Property Generator 
-Jack - Solar System Builder
+Josh - Movement Controller (WASD) [DONE]
+Josh - Movement Controller (Controller) [DONE]
+Jack - Weponary [DONE]
+Jack - Planet Renderer [DONE]
+Jack - Planet Property Generator [DONE]
+Jack - Solar System Builder [DONE]
+Jack - Planet Colisions [DONE]
 Michael - Asteroid Builder 
 Michael - Asteroid Group Caller
-Josh - Space Ship Creator (or find online)
+Josh - Space Ship Creator [DONE]
 Josh - Model Changer / Colour changer 
-Michael - Skybox & Deployer 
+Josh - Skybox & Deployer [DONE]
 Michael - Pause Function (Which links to dat.gui)
-Michael - Colisions  
+Michael - Asteroid Colisions  
 
 Sprint 2: 3rd April to 10th
-Josh - Ship Model 
-Josh - Skybox 
-Josh - Controller Support
+Josh - Ship Model [DONE]
+Josh - Skybox [DONE]
+Josh - Controller Support [DONE]
 Jack - Moons 
-Jack - Continue to work on planets 
-Jack - Solar System layout (Nice to have) 
-Michael - Do above.
+Jack - Continue to work on planets [DONE]
+Jack - Solar System layout (Nice to have) [DONE]
+Michael - Do above. 
 
 
 Nice to Have: 
-Michael - Asteroid Terrain Destruction (Rely on Weponary)
-Jack - Planet Terrain 'Destruction', calls particles 
+Michael - Asteroid Terrain Destruction (Rely on Weponary) 
+Jack - Planet Terrain 'Destruction', calls particles [DONE]
 Josh - Movement Abilities (Boost, Barrel Roll, Handbrake, Self Destruct)
 ALL - Clean, Improve, Uplift 
 
