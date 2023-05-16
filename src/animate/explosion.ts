@@ -1,5 +1,9 @@
 import * as THREE from "three"
-import { triggerExplosion, updateParticles } from "../objects/explosion"
+import {
+  triggerExplosion,
+  updateParticles,
+  triggerExhaust,
+} from "../objects/explosion"
 
 const clock = new THREE.Clock()
 const animateExplosion = () => {
@@ -10,4 +14,12 @@ const animateExplosion = () => {
   updateParticles(deltaTime)
 }
 
-export { animateExplosion }
+const animateExhaust = () => {
+  // Calculate the time difference since the last frame
+  const deltaTime = clock.getDelta()
+
+  // Update the particles
+  updateParticles(deltaTime)
+}
+
+export { animateExplosion, animateExhaust }

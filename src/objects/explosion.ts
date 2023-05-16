@@ -73,4 +73,19 @@ function triggerExplosion(explosionPosition) {
   }
 }
 
-export { setupExplosion, updateParticles, triggerExplosion }
+function triggerExhaust(explosionPosition) {
+  const numParticles = 2
+  for (let i = 0; i < numParticles; i++) {
+    const velocity = new THREE.Vector3(
+      Math.random() - 0.5,
+      Math.random() - 0.5,
+      Math.random() - 0.5
+    ).multiplyScalar(50)
+
+    const lifespan = Math.random() - 0.6
+
+    createParticle(explosionPosition, velocity, lifespan)
+  }
+}
+
+export { setupExplosion, updateParticles, triggerExplosion, triggerExhaust }

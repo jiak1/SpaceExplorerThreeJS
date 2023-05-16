@@ -1,6 +1,6 @@
 import * as THREE from "three"
 
-import { triggerExplosion } from "../objects/explosion"
+import { triggerExplosion, triggerExhaust } from "../objects/explosion"
 import { ship } from "../objects/ship"
 import { camera, controls, objectsGroup, scene } from "../renderer/renderer"
 import { keyboardKeys } from "./util/keyboard"
@@ -31,6 +31,8 @@ const gamepadState = {
   rollLeft: false,
   rollRight: false,
   pause: false,
+  shoot: false,
+  boost: false,
 }
 
 // Gamepad button mappings (adjust as needed)
@@ -46,11 +48,16 @@ const buttonMappings = {
   4: "rollLeft", // Back button
   5: "rollRight", // Start button
   9: "pause", // Options Button
+  17: "shoot", // Touch Button
+  8: "boost", // Share Button
 }
+
+let isBoosting = false
+let boostTimer = 0
 
 const animateMove = () => {
   if (!isDying) {
-    const moveDistance = 200 * seconds // Pixels per sec
+    const moveDistance = (isBoosting ? 600 : 200) * seconds // Pixels per sec, doubled during boost
 
     const cubeRotator = (Math.PI / 2) * seconds
 
@@ -66,8 +73,36 @@ const animateMove = () => {
       }
     }
 
+    // Check if the boost key (B) is pressed
+    if (gamepadState.boost && !isBoosting) {
+      isBoosting = true
+      boostTimer = 5 // Set the boost timer to 5 seconds
+      // Apply boost effect here if needed
+    }
+
+    // Reduce the boost timer by the elapsed time
+    if (boostTimer > 0) {
+      boostTimer -= seconds
+      if (boostTimer <= 0) {
+        isBoosting = false
+        // Remove boost effect here if needed
+      }
+    }
+
     // CORE MOVEMENT (FORWARD, BACK, UP and DOWN)
-    if (gamepadState.forward || keyboardKeys.w) ship.translateZ(-moveDistance) // Forward
+    if (gamepadState.forward || keyboardKeys.w) {
+      ship.translateZ(-moveDistance)
+      const exhaustOffsetRight = new THREE.Vector3(4.5, 0, 0) // offset for the right
+      const exhaustOffsetLeft = new THREE.Vector3(-4.5, 0, 0) // offset for the left
+      const exhaustPositionRight = exhaustOffsetRight
+        .clone()
+        .applyMatrix4(ship.matrixWorld)
+      const exhaustPositionLeft = exhaustOffsetLeft
+        .clone()
+        .applyMatrix4(ship.matrixWorld)
+      triggerExhaust(exhaustPositionRight)
+      triggerExhaust(exhaustPositionLeft)
+    }
     if (gamepadState.backward || keyboardKeys.s) ship.translateZ(moveDistance) // Back
     if (gamepadState.up || keyboardKeys.l) ship.translateY(moveDistance) // Up
     if (gamepadState.down || keyboardKeys.k) ship.translateY(-moveDistance) // Down
@@ -94,7 +129,7 @@ const animateMove = () => {
   }
 
   if (fixedCamera) {
-    const camDistance = new THREE.Vector3(0, 45, 150) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
+    const camDistance = new THREE.Vector3(0, 20, 100) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
     const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
     camera.position.x = camFollowDist.x
     camera.position.y = camFollowDist.y
@@ -170,7 +205,7 @@ const animateDeath = () => {
 }
 
 const tryShoot = () => {
-  if (keyboardKeys[" "] && ship) {
+  if (ship && (keyboardKeys[" "] || gamepadState.shoot)) {
     const geometry = new THREE.BoxGeometry(3, 3, 20)
     const material = new THREE.MeshStandardMaterial({ color: "#FFA500" })
     const mesh = new THREE.Mesh(geometry, material)
