@@ -1,5 +1,9 @@
 import * as THREE from "three"
-import { triggerExplosion, updateParticles, triggerExhaust } from "../objects/explosion"
+import {
+  triggerExplosion,
+  updateParticles,
+  triggerExhaust,
+} from "../objects/explosion"
 
 const clock = new THREE.Clock()
 const animateExplosion = () => {
