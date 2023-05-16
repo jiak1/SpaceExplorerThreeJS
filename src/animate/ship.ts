@@ -1,8 +1,11 @@
 import * as THREE from "three"
+
 import { triggerExplosion, triggerExhaust } from "../objects/explosion"
 import { ship } from "../objects/ship"
-import { camera, objectsGroup, scene } from "../renderer/renderer"
+import { camera, controls, objectsGroup, scene } from "../renderer/renderer"
 import { keyboardKeys } from "./util/keyboard"
+
+const { throttle } = require("throttle-debounce")
 
 const raycaster = new THREE.Raycaster()
 
@@ -132,6 +135,8 @@ const animateMove = () => {
     camera.position.y = camFollowDist.y
     camera.position.z = camFollowDist.z
     camera.lookAt(ship.position)
+  } else {
+    controls.update()
   }
 }
 
@@ -197,19 +202,10 @@ const animateDeath = () => {
       }
     }
   }
-  setTimeout(animateDeath, 100)
-}
-
-const animateShip = () => {
-  seconds = clock.getDelta() // seconds - speed to move .
-  if (!ship) return
-
-  animateMove()
-  animateBullets()
 }
 
 const tryShoot = () => {
-  if ((ship && keyboardKeys[" "]) || gamepadState.shoot) {
+  if (ship && (keyboardKeys[" "] || gamepadState.shoot)) {
     const geometry = new THREE.BoxGeometry(3, 3, 20)
     const material = new THREE.MeshStandardMaterial({ color: "#FFA500" })
     const mesh = new THREE.Mesh(geometry, material)
@@ -260,7 +256,19 @@ const tryShoot = () => {
     })
     scene.add(mesh)
   }
-  setTimeout(tryShoot, 200)
+}
+
+const runTryShoot = throttle(200, tryShoot)
+const runAnimateDeath = throttle(700, animateDeath)
+
+const animateShip = () => {
+  seconds = clock.getDelta() // seconds - speed to move .
+  if (!ship) return
+
+  animateMove()
+  animateBullets()
+  runTryShoot()
+  runAnimateDeath()
 }
 
 const setupShipAnimation = () => {
@@ -271,9 +279,6 @@ const setupShipAnimation = () => {
     bullets.splice(i, 1)
   }
   bullets = []
-
-  setTimeout(tryShoot, 200)
-  setTimeout(animateDeath, 700)
 }
 
 export { fixedCamera, updateFixedCamera, animateShip, setupShipAnimation }

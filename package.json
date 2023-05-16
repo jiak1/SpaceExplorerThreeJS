@@ -39,6 +39,7 @@
     "gamepad.js": "^2.1.0",
     "three": "^0.143.0",
     "three-outlinepass": "^1.2.0",
+    "throttle-debounce": "^5.0.0",
     "ts-node": "^10.9.1",
     "typescript": "3.8.3"
   }

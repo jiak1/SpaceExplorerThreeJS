@@ -4,16 +4,16 @@ import { stats } from "../gui/gui"
 import { animatePlanet, setupPlanetAnimation } from "./planet"
 import { animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
-import { animateExplosion /* animateExhaust */ } from "./explosion"
+import { animateExplosion } from "./explosion"
+
+let animating = false
 
 const animate = () => {
   requestAnimationFrame(animate)
-  controls.update()
 
-  animateShip()
   animatePlanet()
   animateExplosion()
-  // animateExhaust()
+  animateShip()
 
   render()
 
@@ -21,10 +21,13 @@ const animate = () => {
 }
 
 const setupAnimate = () => {
-  setupKeyboardTracking()
-  setupPlanetAnimation()
+  if (!animating) {
+    setupKeyboardTracking()
+    animate()
+    animating = true
+  }
   setupShipAnimation()
-  animate()
+  setupPlanetAnimation()
 }
 
 export { setupAnimate }
