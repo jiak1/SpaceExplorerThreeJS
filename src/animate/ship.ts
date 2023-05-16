@@ -29,6 +29,7 @@ const gamepadState = {
   rollRight: false,
   pause: false,
   shoot: false,
+  boost: false,
 }
 
 // Gamepad button mappings (adjust as needed)
@@ -45,11 +46,15 @@ const buttonMappings = {
   5: "rollRight", // Start button
   9: "pause", // Options Button
   17: "shoot", // Touch Button
+  8: "boost", // Share Button
 }
+
+let isBoosting = false
+let boostTimer = 0
 
 const animateMove = () => {
   if (!isDying) {
-    const moveDistance = 200 * seconds // Pixels per sec
+    const moveDistance = (isBoosting ? 600 : 200) * seconds // Pixels per sec, doubled during boost
 
     const cubeRotator = (Math.PI / 2) * seconds
 
@@ -62,6 +67,22 @@ const animateMove = () => {
         if (mapping) {
           gamepadState[mapping] = button.pressed
         }
+      }
+    }
+
+    // Check if the boost key (B) is pressed
+    if (gamepadState.boost && !isBoosting) {
+      isBoosting = true
+      boostTimer = 5 // Set the boost timer to 5 seconds
+      // Apply boost effect here if needed
+    }
+
+    // Reduce the boost timer by the elapsed time
+    if (boostTimer > 0) {
+      boostTimer -= seconds
+      if (boostTimer <= 0) {
+        isBoosting = false
+        // Remove boost effect here if needed
       }
     }
 
