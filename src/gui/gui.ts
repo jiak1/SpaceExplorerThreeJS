@@ -4,10 +4,18 @@ import Stats from "three/examples/jsm/libs/stats.module"
 import { debounce } from "../util/debounce"
 import { setupAnimate } from "../animate/animate"
 import { setupObjects } from "../objects/objects"
-import { fixedCamera, updateFixedCamera } from "../animate/ship"
+import {
+  fixedCamera,
+  updateFixedCamera,
+  boostSpeed,
+  baseSpeed,
+  updateBoostSpeed,
+  updateBaseSpeed,
+} from "../animate/ship"
 import { camera, toggleOrbitControls } from "../renderer/renderer"
 import { planetCount, updatePlanetCount } from "../objects/planet"
 import { rotateSpeed, updateRotateSpeed } from "../animate/planet"
+import { exP, updateExP } from "../objects/explosion"
 
 let stats: Stats
 let gui: GUI
@@ -16,8 +24,11 @@ const config = {
   FixedCamera: fixedCamera,
   Amplitude: 1,
   Octaves: 4,
+  "Boost Speed": boostSpeed,
+  "Base Speed": baseSpeed,
   "Spin Speed": rotateSpeed,
   "Planet Count": planetCount,
+  "Exhaust Count": exP,
 }
 
 const resetObjects = () => {
@@ -27,6 +38,21 @@ const resetObjects = () => {
 
 const planetCountChanged = debounce((newVal) => {
   updatePlanetCount(newVal)
+  resetObjects()
+})
+
+const boostSpeedChanged = debounce((newVal) => {
+  updateBoostSpeed(newVal)
+  resetObjects()
+})
+
+const baseSpeedChanged = debounce((newVal) => {
+  updateBaseSpeed(newVal)
+  resetObjects()
+})
+
+const exhaustCountChanged = debounce((newVal) => {
+  updateExP(newVal)
   resetObjects()
 })
 
@@ -44,6 +70,26 @@ const setupGUI = () => {
     .onChange((newVal) => {
       updateFixedCamera(newVal)
       toggleOrbitControls(newVal)
+    })
+  cubeFolder
+    .add(config, "Boost Speed", 0, 1000, 1)
+    .listen()
+    .onChange((newVal) => {
+      updateBoostSpeed(newVal)
+    })
+
+  cubeFolder
+    .add(config, "Base Speed", 0, 500, 1)
+    .listen()
+    .onChange((newVal) => {
+      updateBaseSpeed(newVal)
+    })
+
+  cubeFolder
+    .add(config, "Exhaust Count", 0, 5, 1) // Setting too high can have peformance issues
+    .listen()
+    .onChange((newVal) => {
+      updateExP(newVal)
     })
 
   cubeFolder.open()
