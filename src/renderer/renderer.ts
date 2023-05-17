@@ -39,7 +39,7 @@ function onWindowResize() {
 const setupSkybox = () => {
   const textureLoader = new THREE.CubeTextureLoader()
 
-  const textures = [
+  const textures1 = [
     "textures/corona_ft.png",
     "textures/corona_bk.png",
     "textures/corona_up.png",
@@ -48,7 +48,16 @@ const setupSkybox = () => {
     "textures/corona_lf.png",
   ]
 
-  const textureCube = textureLoader.load(textures)
+  const textures2 = [
+    "textures/bkg1_front.png",
+    "textures/bkg1_back.png",
+    "textures/bkg1_top.png",
+    "textures/bkg1_bottom.png",
+    "textures/bkg1_right.png",
+    "textures/bkg1_left.png",
+  ]
+
+  const textureCube = textureLoader.load(textures1)
   scene.background = textureCube
 }
 
@@ -83,6 +92,7 @@ const setupRenderer = () => {
 }
 
 const toggleOrbitControls = (enabled) => (controls.enabled = !enabled)
+// const toggleSkyboxChange = (enabled) => (controls.enabled = !enabled) -- Need assistance
 
 export {
   setupRenderer,

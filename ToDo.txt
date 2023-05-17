@@ -1,37 +1,25 @@
-Sprint 1
-
-Josh - Movement Controller (WASD) 
-Josh - Movement Controller (Controller)
-Josh - Weponary 
-Jack - Planet Renderer
-Jack - Planet Property Generator 
-Jack - Solar System Builder
-Michael - Asteroid Builder 
-Michael - Asteroid Group Caller
-Josh - Space Ship Creator (or find online)
+Core: 
+Josh - Movement Controller (WASD) [DONE]
+Josh - Movement Controller (Controller) [DONE]
+Jack - Weponary [DONE]
+Jack - Planet Renderer [DONE]
+Jack - Planet Property Generator [DONE]
+Jack - Solar System Builder [DONE]
+Jack - Planet Colisions [DONE]
+Michael - Asteroid Builder [DONE]
+Michael - Asteroid Group Caller 
+Josh - Space Ship Creator [DONE]
 Josh - Model Changer / Colour changer 
-Michael - Skybox & Deployer 
+Josh - Skybox & Deployer [DONE]
 Michael - Pause Function (Which links to dat.gui)
 Michael - Colisions  
 
-Sprint 2: 3rd April to 10th
-Josh - Ship Model 
-Josh - Skybox 
-Josh - Controller Support
+Additions: 
 Jack - Moons 
-Jack - Continue to work on planets 
-Jack - Solar System layout (Nice to have) 
-Michael - Do above.
-
-
-Nice to Have: 
-Michael - Asteroid Terrain Destruction (Rely on Weponary)
+Jack - Solar System layout (With Star/Sun)
+Michael - Asteroid Terrain Destruction 
 Jack - Planet Terrain 'Destruction', calls particles 
-Josh - Movement Abilities (Boost, Barrel Roll, Handbrake, Self Destruct)
-ALL - Clean, Improve, Uplift 
-
-
-
+Josh - Movement Abilities (Boost, Barrel Roll) 1/2 [DONE]
 
 
 
@@ -41,15 +29,6 @@ Skybox, asteroids, planets and a ship. Ship can move and interact
 with surrounds via weapons. Game can be paused and skin can be 
 changed. 
 Planets vary and asteroids form in groups.
-
-
-Week 2: 
-Controller Support
-Skybox 
-Cube Ship Model 
-Shooting (if poss) 
-
-
 
 Week ? : 
 

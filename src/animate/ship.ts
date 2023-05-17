@@ -54,10 +54,14 @@ const buttonMappings = {
 
 let isBoosting = false
 let boostTimer = 0
+let boostSpeed = 600
+const updateBoostSpeed = (newVal) => (boostSpeed = newVal)
+let baseSpeed = 200
+const updateBaseSpeed = (newVal) => (baseSpeed = newVal)
 
 const animateMove = () => {
   if (!isDying) {
-    const moveDistance = (isBoosting ? 600 : 200) * seconds // Pixels per sec, doubled during boost
+    const moveDistance = (isBoosting ? boostSpeed : baseSpeed) * seconds // Pixels per sec, doubled during boost
 
     const cubeRotator = (Math.PI / 2) * seconds
 
@@ -74,10 +78,9 @@ const animateMove = () => {
     }
 
     // Check if the boost key (B) is pressed
-    if (gamepadState.boost && !isBoosting) {
+    if ((gamepadState.boost || keyboardKeys.b) && !isBoosting) {
       isBoosting = true
       boostTimer = 5 // Set the boost timer to 5 seconds
-      // Apply boost effect here if needed
     }
 
     // Reduce the boost timer by the elapsed time
@@ -85,7 +88,6 @@ const animateMove = () => {
       boostTimer -= seconds
       if (boostTimer <= 0) {
         isBoosting = false
-        // Remove boost effect here if needed
       }
     }
 
@@ -281,4 +283,13 @@ const setupShipAnimation = () => {
   bullets = []
 }
 
-export { fixedCamera, updateFixedCamera, animateShip, setupShipAnimation }
+export {
+  fixedCamera,
+  updateFixedCamera,
+  animateShip,
+  setupShipAnimation,
+  boostSpeed,
+  baseSpeed,
+  updateBoostSpeed,
+  updateBaseSpeed,
+}
