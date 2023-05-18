@@ -53,7 +53,7 @@ const fragmentShader = `
   }
 `
 
-const geometry = new THREE.SphereGeometry(10, 10, 10)
+const geometry = new THREE.SphereGeometry(15, 10, 10)
 const material = new THREE.ShaderMaterial({
   vertexShader,
   fragmentShader,
@@ -66,7 +66,8 @@ const material = new THREE.ShaderMaterial({
 })
 const asteroid = new THREE.Mesh(geometry, material)
 
-//--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
+//  -------------------UNFINSHED------------------------------------------------
 // Create a variable to keep track of the number of hits
 let numHits = 0
 
@@ -88,14 +89,14 @@ function onAsteroidHit() {
 }
 // Example of how to trigger the onAsteroidHit() function when the asteroid gets hit
 asteroid.addEventListener("collision", onAsteroidHit)
-//--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
 
 // Define the number of clusters and the number of objects per cluster
-const numClusters = 5
+const numClusters = 40
 const objectsPerCluster = 10
 
 // Define the size of the area in which the clusters will be spawned
-const clusterAreaSize = 500
+const clusterAreaSize = 8000
 
 // Create a new group (asteroids) to hold the objects
 const asteroids = new THREE.Group()
@@ -104,7 +105,7 @@ const asteroids = new THREE.Group()
 for (let i = 0; i < numClusters; i++) {
   // Generate a random position for the cluster within the cluster area
   const clusterX = Math.random() * clusterAreaSize - clusterAreaSize / 2
-  const clusterY = Math.random() * clusterAreaSize - clusterAreaSize / 2
+  const clusterY = 0
   const clusterZ = Math.random() * clusterAreaSize - clusterAreaSize / 2
 
   // Create a new group to hold the objects in this cluster
@@ -113,9 +114,9 @@ for (let i = 0; i < numClusters; i++) {
   // Loop through the number of objects per cluster
   for (let j = 0; j < objectsPerCluster; j++) {
     // Generate a random position for the object within the cluster
-    const objectX = Math.random() * 100 - 5
-    const objectY = Math.random() * 100 - 5
-    const objectZ = Math.random() * 100 - 5
+    const objectX = Math.random() * 200 - 5
+    const objectY = Math.random() * 200 - 5
+    const objectZ = Math.random() * 200 - 5
 
     // Create a new instance of the object
     const instance = asteroid.clone()
