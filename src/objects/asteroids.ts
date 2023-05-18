@@ -1,8 +1,7 @@
 import * as THREE from "three"
 import { scene } from "../renderer/renderer"
-//----------------------------------------------------------------------------------------------------------------------------------------------------------
+import { getRandomInt } from "../util/random"
 
-// New instance of Asteroid
 const vertexShader = `
   uniform float time;
   uniform float displacementScale;
@@ -53,7 +52,7 @@ const fragmentShader = `
   }
 `
 
-const geometry = new THREE.SphereGeometry(10, 10, 10)
+const geometry = new THREE.SphereGeometry(15, 10, 10)
 const material = new THREE.ShaderMaterial({
   vertexShader,
   fragmentShader,
@@ -66,7 +65,8 @@ const material = new THREE.ShaderMaterial({
 })
 const asteroid = new THREE.Mesh(geometry, material)
 
-//--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
+//  -------------------UNFINISHED---------------------------------------------
 // Create a variable to keep track of the number of hits
 let numHits = 0
 
@@ -88,30 +88,47 @@ function onAsteroidHit() {
 }
 // Example of how to trigger the onAsteroidHit() function when the asteroid gets hit
 asteroid.addEventListener("collision", onAsteroidHit)
-//--------------------------------------------------------------------------
+//  --------------------------------------------------------------------------
 
 // Define the number of clusters and the number of objects per cluster
-const numClusters = 5
-const objectsPerCluster = 10
+const numClusters = 60
+const objectsPerCluster = 12
+// Subtract a random position for the object inside the cluster
+const objectsPerClusterDifference = 10
 
 // Define the size of the area in which the clusters will be spawned
-const clusterAreaSize = 500
+const clusterAreaSize = 2500
 
-// Create a new group (asteroids) to hold the objects
 const asteroids = new THREE.Group()
 
 // Loop through the number of clusters
 for (let i = 0; i < numClusters; i++) {
   // Generate a random position for the cluster within the cluster area
-  const clusterX = Math.random() * clusterAreaSize - clusterAreaSize / 2
-  const clusterY = Math.random() * clusterAreaSize - clusterAreaSize / 2
-  const clusterZ = Math.random() * clusterAreaSize - clusterAreaSize / 2
+  let radius
+  let angle
+  let validPosition = false
+
+  while (!validPosition) {
+    radius = Math.random() * clusterAreaSize - clusterAreaSize / 2
+    angle = Math.random() * Math.PI * 2
+    if (radius >= 1000) {
+      validPosition = true
+    }
+  }
+
+  const clusterX = Math.cos(angle) * radius
+  const clusterY = 0
+  const clusterZ = Math.sin(angle) * radius
 
   // Create a new group to hold the objects in this cluster
   const clusterGroup = new THREE.Group()
 
   // Loop through the number of objects per cluster
-  for (let j = 0; j < objectsPerCluster; j++) {
+  for (
+    let j = 0;
+    j < objectsPerCluster - getRandomInt(0, objectsPerClusterDifference);
+    j++
+  ) {
     // Generate a random position for the object within the cluster
     const objectX = Math.random() * 100 - 5
     const objectY = Math.random() * 100 - 5
@@ -140,10 +157,7 @@ for (let i = 0; i < numClusters; i++) {
   asteroids.add(clusterGroup)
 }
 
-//----------------------------------------------------------------------------------------------------------------------------------------------------------
-
 const setupAsteroids = () => {
-  asteroids.position.y = 1000
   scene.add(asteroids)
 }
 
