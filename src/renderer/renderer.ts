@@ -12,25 +12,96 @@ let objectsGroup: THREE.Group
 let controls: OrbitControls
 let composer: EffectComposer
 let outlinePass: OutlinePass
-
 let enablePostProcessing = true
 const togglePostProcessing = () =>
   (enablePostProcessing = !enablePostProcessing)
 
-//  ---------------------PAUSE-------------------------------------------------
-// create a clock to keep track of elapsed time
-const clock = new THREE.Clock()
-
-// create a variable to store the pause state
+// Variable to store the pause state
 let isPaused = false
 
-// add a key listener to toggle the pause state
+const clock = new THREE.Clock()
+
+const pauseMenu = document.createElement("div")
+const buttonList = document.createElement("ul")
+const resumeButton = document.createElement("li")
+const restartButton = document.createElement("li")
+const buttons = buttonList.getElementsByTagName("li")
+
+pauseMenu.id = "pause-menu"
+document.body.appendChild(pauseMenu)
+
+// Unordered list for the buttons
+pauseMenu.appendChild(buttonList)
+
+// Buttons as list items
+resumeButton.innerHTML = "Resume"
+buttonList.appendChild(resumeButton)
+
+restartButton.innerHTML = "Restart"
+buttonList.appendChild(restartButton)
+
+// Style the pause menu using CSS
+pauseMenu.style.position = "fixed"
+pauseMenu.style.top = "50%"
+pauseMenu.style.left = "50%"
+pauseMenu.style.transform = "translate(-50%, -50%)"
+pauseMenu.style.backgroundColor = "rgba(0, 0, 0, 0.8)"
+pauseMenu.style.padding = "20px"
+pauseMenu.style.display = "none"
+
+// Style the button list
+buttonList.style.listStyle = "none"
+buttonList.style.margin = "0"
+buttonList.style.padding = "0"
+
+// Style the buttons
+for (let i = 0; i < buttons.length; i++) {
+  const button = buttons[i]
+  button.style.marginBottom = "10px"
+  button.style.backgroundColor = "#DC143C"
+  button.style.color = "#fff"
+  button.style.padding = "10px 20px"
+  button.style.border = "none"
+  button.addEventListener("mouseover", () => {
+    button.style.backgroundColor = "#FF0000"
+  })
+  button.addEventListener("mouseout", () => {
+    button.style.backgroundColor = "#DC143C"
+  })
+}
+
+// Show/hide the pause menu
+function togglePauseMenu() {
+  if (pauseMenu.style.display === "none") {
+    pauseMenu.style.display = "block"
+  } else {
+    pauseMenu.style.display = "none"
+  }
+}
+
+function pause() {
+  isPaused = !isPaused
+}
+
+resumeButton.addEventListener("click", () => {
+  // Perform resume action
+  togglePauseMenu()
+  pause()
+})
+
+restartButton.addEventListener("click", () => {
+  // Perform restart action
+  togglePauseMenu()
+  pause()
+})
+
+// Toggle the pause state. Can use both "p" or "Escape" keys
 window.addEventListener("keydown", (event) => {
-  if (event.key === "p") {
-    isPaused = !isPaused
+  if (event.key === "p" || event.key === "Escape") {
+    pause()
+    togglePauseMenu()
   }
 })
-//  ---------------------PAUSE-------------------------------------------------
 
 function render() {
   if (!isPaused) {
@@ -150,4 +221,5 @@ export {
   enablePostProcessing,
   toggleOrbitControls,
   composer,
+  pause,
 }
