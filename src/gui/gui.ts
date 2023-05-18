@@ -11,6 +11,12 @@ import {
   baseSpeed,
   updateBoostSpeed,
   updateBaseSpeed,
+  camX,
+  camY,
+  camZ,
+  updateCamX,
+  updateCamY,
+  updateCamZ,
 } from "../animate/ship"
 import {
   outlinePass,
@@ -38,6 +44,9 @@ const config = {
   "Spin Speed": rotateSpeed,
   "Planet Count": planetCount,
   "Exhaust Count": exP,
+  "Camera X": camX,
+  "Camera Y": camY,
+  "Camera Z": camZ,
   "Glow Strength": outlinePass?.edgeStrength || 1.3,
   "Glow Amount": outlinePass?.edgeGlow || 8.5,
   "Glow Thickness": outlinePass?.edgeThickness || 3,
@@ -68,14 +77,6 @@ const setupGUI = () => {
   gui = new GUI()
   const cubeFolder = gui.addFolder("Ship")
 
-  cubeFolder
-    .add(config, "FixedCamera")
-    .name("Fixed Camera")
-    .listen()
-    .onChange((newVal) => {
-      updateFixedCamera(newVal)
-      toggleOrbitControls(newVal)
-    })
   cubeFolder
     .add(config, "Boost Speed", 0, 1000, 1)
     .listen()
@@ -148,6 +149,35 @@ const setupGUI = () => {
       outlinePass.visibleEdgeColor.set(newVal)
     })
   sunFolder.open()
+
+  const camFolder = gui.addFolder("Camera")
+  camFolder
+    .add(config, "FixedCamera")
+    .name("Fixed Camera")
+    .listen()
+    .onChange((newVal) => {
+      updateFixedCamera(newVal)
+      toggleOrbitControls(newVal)
+    })
+  camFolder
+    .add(config, "Camera X", -100, 100, 1)
+    .listen()
+    .onChange((newVal) => {
+      updateCamX(newVal)
+    })
+  camFolder
+    .add(config, "Camera Y", -200, 200, 1)
+    .listen()
+    .onChange((newVal) => {
+      updateCamY(newVal)
+    })
+  camFolder
+    .add(config, "Camera Z", -300, 300, 1)
+    .listen()
+    .onChange((newVal) => {
+      updateCamZ(newVal)
+    })
+  camFolder.open()
 }
 
 export { setupGUI, stats, gui }
