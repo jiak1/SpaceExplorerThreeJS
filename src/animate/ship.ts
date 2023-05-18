@@ -191,7 +191,7 @@ const animateDeath = () => {
         const { object } = intersect
         return (
           (object instanceof THREE.Group || object instanceof THREE.Mesh) &&
-          object.name.includes("Planet")
+          (object.name.includes("Planet") || object.name.includes("Asteroid"))
         )
       })
 
@@ -210,6 +210,10 @@ const animateDeath = () => {
       }
     }
   }
+}
+
+const destroyObject = (hitObject) => {
+  scene.remove(hitObject.mesh)
 }
 
 const tryShoot = () => {
@@ -238,7 +242,7 @@ const tryShoot = () => {
         const { object } = intersect
         return (
           (object instanceof THREE.Group || object instanceof THREE.Mesh) &&
-          object.name.includes("Planet")
+          (object.name.includes("Planet") || object.name.includes("Asteroid"))
         )
       })
 
@@ -248,6 +252,12 @@ const tryShoot = () => {
         setTimeout(() => {
           triggerExplosion(intersection.point)
         }, intersection.distance / bulletSpeed)
+        console.log(intersection.object.name)
+        if (intersection.object.name.includes("Asteroid")) {
+          intersection.object.visible = false
+          intersection.object.name = "Destroyed"
+          console.log("ASTEROID HIT")
+        }
       }
     }
 

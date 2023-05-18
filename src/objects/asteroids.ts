@@ -95,15 +95,20 @@ asteroid.addEventListener("collision", onAsteroidHit)
 //  --------------------------------------------------------------------------
 
 // Define the number of clusters and the number of objects per cluster
-const numClusters = 60
+const numClusters = 25
 const objectsPerCluster = 12
-// Subtract a random position for the object inside the cluster
+// Subtract a random number of objects (asteroids) inside the cluster
 const objectsPerClusterDifference = 10
 
 // Define the size of the area in which the clusters will be spawned
 const clusterAreaSize = 2500
 
 let asteroids = new THREE.Group()
+const angles = []
+const radiuses = []
+const asteroidsX = []
+const asteroidsY = []
+const asteroidsZ = []
 
 const createAsteroids = () => {
   asteroids = new THREE.Group()
@@ -157,7 +162,15 @@ const createAsteroids = () => {
       instance.rotation.z = (Math.random() - 0.5) * 10
 
       // Add the object to the cluster group
+      instance.name = "Asteroid"
       clusterGroup.add(instance)
+
+      // Stores positioning data for individual asteroids
+      radiuses.push(radius)
+      angles.push(angle)
+      asteroidsX.push(objectX)
+      asteroidsY.push(objectY)
+      asteroidsZ.push(objectZ)
     }
 
     // Add the cluster group to the main group
@@ -172,4 +185,14 @@ const setupAsteroids = () => {
   }
 }
 
-export { setupAsteroids, asteroids, showAsteroids, toggleAsteroids }
+export {
+  setupAsteroids,
+  asteroids,
+  showAsteroids,
+  angles,
+  radiuses,
+  asteroidsX,
+  asteroidsY,
+  asteroidsZ,
+  toggleAsteroids,
+}

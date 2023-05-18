@@ -6,6 +6,7 @@ import { animateRaycasts, animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
 import { animateExplosion } from "./explosion"
 import { animateSun, setupSun } from "./sun"
+import { animateAsteroids } from "./asteroids"
 
 let animating = false
 
@@ -18,7 +19,7 @@ const animate = () => {
   }
   animateShip()
   animateSun()
-
+  animateAsteroids()
   render()
 
   stats.update()
