@@ -133,9 +133,7 @@ const animateMove = () => {
   if (fixedCamera) {
     const camDistance = new THREE.Vector3(0, 20, 100) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
     const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
-    camera.position.x = camFollowDist.x
-    camera.position.y = camFollowDist.y
-    camera.position.z = camFollowDist.z
+    camera.position.lerp(camFollowDist, 0.35)
     camera.lookAt(ship.position)
   } else {
     controls.update()
@@ -164,16 +162,13 @@ const animateBullets = () => {
 }
 
 const animateDeath = () => {
-  if (ship) {
+  if (ship && !isDying) {
     const shipDirection = new THREE.Vector3()
     shipDirection.set(0, 0, -1) // Initial direction pointing towards negative Z-axis
     shipDirection.applyEuler(ship.rotation)
     shipDirection.normalize() // Normalize the vector
 
     raycaster.set(ship.position, shipDirection)
-
-    const excludeObjects: (THREE.Group | THREE.Mesh)[] = [ship]
-    bullets.forEach((bullet) => excludeObjects.push(bullet.mesh))
 
     const intersects = raycaster
       .intersectObjects(
@@ -184,14 +179,13 @@ const animateDeath = () => {
         const { object } = intersect
         return (
           (object instanceof THREE.Group || object instanceof THREE.Mesh) &&
-          !excludeObjects.includes(object) &&
-          !object.name.includes("Starship")
+          object.name.includes("Planet")
         )
       })
 
     if (intersects.length > 0) {
       const intersection = intersects[0]
-      if (intersection.distance < 40) {
+      if (intersection.distance < 100) {
         isDying = true
         triggerExplosion(intersection.point)
         ship.children[0].visible = false
@@ -223,9 +217,6 @@ const tryShoot = () => {
 
     raycaster.set(ship.position, bulletDirection)
 
-    const excludeObjects: (THREE.Group | THREE.Mesh)[] = [ship]
-    bullets.forEach((bullet) => excludeObjects.push(bullet.mesh))
-
     const intersects = raycaster
       .intersectObjects(
         objectsGroup.children,
@@ -235,8 +226,7 @@ const tryShoot = () => {
         const { object } = intersect
         return (
           (object instanceof THREE.Group || object instanceof THREE.Mesh) &&
-          !excludeObjects.includes(object) &&
-          !object.name.includes("Starship")
+          object.name.includes("Planet")
         )
       })
 
@@ -261,7 +251,7 @@ const tryShoot = () => {
 }
 
 const runTryShoot = throttle(200, tryShoot)
-const runAnimateDeath = throttle(700, animateDeath)
+const runAnimateDeath = throttle(500, animateDeath)
 
 const animateShip = () => {
   seconds = clock.getDelta() // seconds - speed to move .

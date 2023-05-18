@@ -193,6 +193,7 @@ const setupPlanets = () => {
 
   for (let i = 1; i <= planetCount; i++) {
     const planet = createPlanet()
+    planet.name = `Planet  ${i}`
 
     objectsGroup.add(planet)
     planets.push(planet)
