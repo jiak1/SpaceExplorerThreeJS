@@ -13,6 +13,10 @@ let controls: OrbitControls
 let composer: EffectComposer
 let outlinePass: OutlinePass
 
+let enablePostProcessing = true
+const togglePostProcessing = () =>
+  (enablePostProcessing = !enablePostProcessing)
+
 //  ---------------------PAUSE-------------------------------------------------
 // create a clock to keep track of elapsed time
 const clock = new THREE.Clock()
@@ -30,8 +34,11 @@ window.addEventListener("keydown", (event) => {
 
 function render() {
   if (!isPaused) {
-    const elapsedTime = clock.getElapsedTime()
-    composer.render()
+    if (enablePostProcessing) {
+      composer.render()
+    } else {
+      renderer.render(scene, camera)
+    }
   }
 }
 
@@ -139,6 +146,8 @@ export {
   render,
   objectsGroup,
   outlinePass,
+  togglePostProcessing,
+  enablePostProcessing,
   toggleOrbitControls,
   composer,
 }

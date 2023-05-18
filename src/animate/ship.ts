@@ -136,6 +136,9 @@ const animateMove = () => {
     if (keyboardKeys.z || gamepadState.pause) {
       ship.position.set(0, 0, 1000) // Y needs to be 25 or cube will sink into ground
       ship.rotation.set(0, 0, 0)
+      camX = 0
+      camY = 20
+      camZ = 100
     }
   }
 

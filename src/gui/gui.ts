@@ -21,8 +21,10 @@ import {
   animateRaycasts,
 } from "../animate/ship"
 import {
+  enablePostProcessing,
   outlinePass,
   toggleOrbitControls,
+  togglePostProcessing,
   toggleSkybox,
 } from "../renderer/renderer"
 import {
@@ -56,6 +58,7 @@ const config = {
   "Glow Colour": outlinePass?.visibleEdgeColor || "#fccb59",
   Seed: seed,
   "Toggle Skybox": () => toggleSkybox(),
+  "Enable Glow": enablePostProcessing,
   "Show Asteroids": showAsteroids,
   "Enable Shooting": animateRaycasts,
 }
@@ -166,6 +169,12 @@ const setupGUI = () => {
     .listen()
     .onChange((newVal) => {
       outlinePass.visibleEdgeColor.set(newVal)
+    })
+  sunFolder
+    .add(config, "Enable Glow")
+    .listen()
+    .onChange((newVal) => {
+      togglePostProcessing()
     })
   sunFolder.open()
 

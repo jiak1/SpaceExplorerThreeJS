@@ -2,7 +2,7 @@
 import { composer, controls, render, renderer } from "../renderer/renderer"
 import { stats } from "../gui/gui"
 import { animatePlanet, setupPlanetAnimation } from "./planet"
-import { animateShip, setupShipAnimation } from "./ship"
+import { animateRaycasts, animateShip, setupShipAnimation } from "./ship"
 import { setupKeyboardTracking } from "./util/keyboard"
 import { animateExplosion } from "./explosion"
 import { animateSun, setupSun } from "./sun"
@@ -13,7 +13,9 @@ const animate = () => {
   requestAnimationFrame(animate)
 
   animatePlanet()
-  animateExplosion()
+  if (animateRaycasts) {
+    animateExplosion()
+  }
   animateShip()
   animateSun()
 
