@@ -58,12 +58,12 @@ const toggleSkybox = () => {
     currentSkybox = 1
   } else {
     textures = [
-      "textures/bkg1_front.png",
-      "textures/bkg1_back.png",
-      "textures/bkg1_top.png",
-      "textures/bkg1_bottom.png",
-      "textures/bkg1_right.png",
-      "textures/bkg1_left.png",
+      "textures/redeclipse_ft.png",
+      "textures/redeclipse_bk.png",
+      "textures/redeclipse_up.png",
+      "textures/redeclipse_dn.png",
+      "textures/redeclipse_rt.png",
+      "textures/redeclipse_lf.png",
     ]
     currentSkybox = 0
   }

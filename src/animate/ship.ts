@@ -15,6 +15,12 @@ let seconds = 0
 
 let isDying = false
 let fixedCamera = true
+let camX = 0
+let camY = 20
+let camZ = 100
+const updateCamX = (newVal) => (camX = newVal)
+const updateCamY = (newVal) => (camY = newVal)
+const updateCamZ = (newVal) => (camZ = newVal)
 
 const updateFixedCamera = (newVal) => (fixedCamera = newVal)
 
@@ -131,7 +137,7 @@ const animateMove = () => {
   }
 
   if (fixedCamera) {
-    const camDistance = new THREE.Vector3(0, 20, 100) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
+    const camDistance = new THREE.Vector3(camX, camY, camZ) // Chance value 2 (Y) to modify viewing angle and value 3 (Z) to change camera follow distance
     const camFollowDist = camDistance.applyMatrix4(ship.matrixWorld)
     camera.position.lerp(camFollowDist, 0.35)
     camera.lookAt(ship.position)
@@ -282,4 +288,10 @@ export {
   baseSpeed,
   updateBoostSpeed,
   updateBaseSpeed,
+  camX,
+  camY,
+  camZ,
+  updateCamX,
+  updateCamY,
+  updateCamZ,
 }
