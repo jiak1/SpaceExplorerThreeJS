@@ -2,9 +2,9 @@ import * as THREE from "three"
 import { objectsGroup, scene } from "../renderer/renderer"
 import { getRandomInt } from "../util/random"
 
-const showAsteroids = true
+let showAsteroids = true
 
-const toggleAsteroids = () => !showAsteroids
+const toggleAsteroids = () => (showAsteroids = !showAsteroids)
 
 const vertexShader = `
   uniform float time;
