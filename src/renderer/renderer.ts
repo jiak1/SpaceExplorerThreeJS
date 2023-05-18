@@ -1,11 +1,16 @@
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass"
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass"
 
 let camera: THREE.PerspectiveCamera
 let renderer: THREE.WebGLRenderer
 let scene: THREE.Scene
 let objectsGroup: THREE.Group
 let controls: OrbitControls
+let composer: EffectComposer
+let outlinePass: OutlinePass
 
 //  ---------------------PAUSE-------------------------------------------------
 // create a clock to keep track of elapsed time
@@ -61,6 +66,27 @@ const setupSkybox = () => {
   scene.background = textureCube
 }
 
+const setupPostProcessing = () => {
+  composer = new EffectComposer(renderer)
+
+  const renderPass = new RenderPass(scene, camera)
+  composer.addPass(renderPass)
+
+  outlinePass = new OutlinePass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    scene,
+    camera
+  )
+
+  outlinePass.edgeStrength = 1.3
+  outlinePass.edgeGlow = 8.5
+  outlinePass.edgeThickness = 3
+  outlinePass.pulsePeriod = 0
+  outlinePass.visibleEdgeColor.set("#fccb59")
+
+  composer.addPass(outlinePass)
+}
+
 const setupRenderer = () => {
   scene = new THREE.Scene()
 
@@ -88,6 +114,8 @@ const setupRenderer = () => {
   const light = new THREE.AmbientLight(0xffc0cb, 1) // soft white light
   scene.add(light)
 
+  setupPostProcessing()
+
   setupSkybox()
 }
 
@@ -102,5 +130,7 @@ export {
   controls,
   render,
   objectsGroup,
+  outlinePass,
   toggleOrbitControls,
+  composer,
 }

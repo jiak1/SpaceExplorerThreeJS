@@ -17,10 +17,9 @@ const setupPlanetAnimation = () => {
 
 const animatePlanet = () => {
   totalTime += clock.getDelta() * rotateSpeed
-
   if (planets) {
-    const dist_apart = 350
-    const min_dist = 2
+    const dist_apart = 365
+    const min_dist = 3
 
     for (let i = 1; i <= planets.length; i++) {
       const angle = (2 * Math.PI + totalTime + offsets[i - 1]) / planets.length

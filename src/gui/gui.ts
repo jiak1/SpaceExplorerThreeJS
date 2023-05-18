@@ -12,8 +12,13 @@ import {
   updateBoostSpeed,
   updateBaseSpeed,
 } from "../animate/ship"
-import { camera, toggleOrbitControls } from "../renderer/renderer"
-import { planetCount, updatePlanetCount } from "../objects/planet"
+import { outlinePass, toggleOrbitControls } from "../renderer/renderer"
+import {
+  planetCount,
+  seed,
+  updatePlanetCount,
+  updatePlanetSeed,
+} from "../objects/planet"
 import { rotateSpeed, updateRotateSpeed } from "../animate/planet"
 import { exP, updateExP } from "../objects/explosion"
 
@@ -29,6 +34,11 @@ const config = {
   "Spin Speed": rotateSpeed,
   "Planet Count": planetCount,
   "Exhaust Count": exP,
+  "Glow Strength": outlinePass?.edgeStrength || 1.3,
+  "Glow Amount": outlinePass?.edgeGlow || 8.5,
+  "Glow Thickness": outlinePass?.edgeThickness || 3,
+  "Glow Colour": outlinePass?.visibleEdgeColor || "#fccb59",
+  Seed: seed,
 }
 
 const resetObjects = () => {
@@ -41,18 +51,8 @@ const planetCountChanged = debounce((newVal) => {
   resetObjects()
 })
 
-const boostSpeedChanged = debounce((newVal) => {
-  updateBoostSpeed(newVal)
-  resetObjects()
-})
-
-const baseSpeedChanged = debounce((newVal) => {
-  updateBaseSpeed(newVal)
-  resetObjects()
-})
-
-const exhaustCountChanged = debounce((newVal) => {
-  updateExP(newVal)
+const planetSeedChanged = debounce((newVal) => {
+  updatePlanetSeed(newVal)
   resetObjects()
 })
 
@@ -107,30 +107,40 @@ const setupGUI = () => {
     .onChange((newVal) => {
       planetCountChanged(newVal)
     })
-  /* planetFolder
-    .add(config, "Amplitude", 0, 1, 0.01)
-    .listen()
-    .onChange((newVal) => {
-      const planetMats = planets[0].material as THREE.ShaderMaterial[]
-      for (let i = 0; i < planetMats.length; i++) {
-        planetMats[i].uniforms.amplitude.value = newVal
-      }
-    })
-
   planetFolder
-    .add(config, "Octaves", 4, 20, 1)
+    .add(config, "Seed", 0, 10000, 1)
     .listen()
     .onChange((newVal) => {
-      const planetMats = planets[0].material as THREE.ShaderMaterial[]
-      for (let i = 0; i < planetMats.length; i++) {
-        planetMats[i].uniforms.octaves.value = newVal
-      }
-    }) */
+      planetSeedChanged(newVal)
+    })
   planetFolder.open()
 
-  const cameraFolder = gui.addFolder("Camera")
-  cameraFolder.add(camera.position, "z", 0, 10, 0.01)
-  cameraFolder.open()
+  const sunFolder = gui.addFolder("Sun")
+  sunFolder
+    .add(config, "Glow Strength", 0, 50, 0.1)
+    .listen()
+    .onChange((newVal) => {
+      outlinePass.edgeStrength = newVal
+    })
+  sunFolder
+    .add(config, "Glow Amount", 0, 50, 0.1)
+    .listen()
+    .onChange((newVal) => {
+      outlinePass.edgeGlow = newVal
+    })
+  sunFolder
+    .add(config, "Glow Thickness", 0, 50, 0.1)
+    .listen()
+    .onChange((newVal) => {
+      outlinePass.edgeThickness = newVal
+    })
+  sunFolder
+    .addColor(config, "Glow Colour")
+    .listen()
+    .onChange((newVal) => {
+      outlinePass.visibleEdgeColor.set(newVal)
+    })
+  sunFolder.open()
 }
 
 export { setupGUI, stats, gui }

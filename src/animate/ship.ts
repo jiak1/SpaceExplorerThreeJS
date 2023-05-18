@@ -126,7 +126,7 @@ const animateMove = () => {
     // RESET
     if (keyboardKeys.z || gamepadState.pause) {
       ship.position.set(0, 25, 0) // Y needs to be 25 or cube will sink into ground
-      ship.rotation.set(0, 0, 0)
+      ship.rotation.set(0, 0, 1000)
     }
   }
 
@@ -191,7 +191,7 @@ const animateDeath = () => {
         ship.children[0].visible = false
         setTimeout(() => {
           isDying = false
-          ship.position.set(0, 25, 0)
+          ship.position.set(0, 0, 1000)
           ship.rotation.set(0, 0, 0)
           ship.children[0].visible = true
         }, 2000)

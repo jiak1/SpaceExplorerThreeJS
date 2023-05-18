@@ -1,6 +1,8 @@
 import * as THREE from "three"
 import { objectsGroup, scene } from "../renderer/renderer"
-import { getRandomFloat, getRandomInt } from "../util/random"
+import { getRandomInt } from "../util/random"
+
+const Chance = require("chance")
 
 let planets: THREE.Mesh[] = []
 
@@ -154,14 +156,18 @@ const planetColours = [
 ]
 
 let planetCount = 15
+let seed = getRandomInt(0, 10000)
+let chance = new Chance(seed)
 
 const updatePlanetCount = (newVal) => (planetCount = newVal)
 
+const updatePlanetSeed = (newVal) => (seed = newVal)
+
 const getColours = () =>
-  planetColours[getRandomInt(0, planetColours.length - 1)]
+  planetColours[chance.integer({ min: 0, max: planetColours.length - 1 })]
 
 const createPlanet = () => {
-  const size = getRandomInt(60, 300)
+  const size = chance.integer({ min: 60, max: 300 })
   const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(
     size,
     size,
@@ -177,11 +183,14 @@ const createPlanet = () => {
 
   planetMaterial.uniforms.colors.value = getColours()
 
-  planetMaterial.uniforms.amplitude.value = getRandomFloat(0.5, 3)
+  planetMaterial.uniforms.amplitude.value = chance.floating({
+    min: 0.5,
+    max: 3,
+  })
 
   planetMaterial.uniforms.offset.value = new THREE.Vector2(
-    getRandomInt(-1000000, 1000000),
-    getRandomInt(-1000000, 1000000)
+    chance.integer({ min: -1000000, max: 1000000 }),
+    chance.integer({ min: -1000000, max: 1000000 })
   )
 
   // Create a mesh with the box geometry and the array of materials
@@ -190,15 +199,25 @@ const createPlanet = () => {
 
 const setupPlanets = () => {
   planets = []
+  chance = new Chance(seed)
 
   for (let i = 1; i <= planetCount; i++) {
     const planet = createPlanet()
     planet.name = `Planet  ${i}`
 
+    const y = getRandomInt(-50, 50)
+    planet.position.y = y
+
     objectsGroup.add(planet)
     planets.push(planet)
   }
-  console.log(planets.length)
 }
 
-export { setupPlanets, planets, updatePlanetCount, planetCount }
+export {
+  setupPlanets,
+  planets,
+  updatePlanetCount,
+  updatePlanetSeed,
+  planetCount,
+  seed,
+}

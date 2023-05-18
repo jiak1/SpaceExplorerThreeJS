@@ -10,7 +10,7 @@ const setupShip = () => {
   loader.load(
     model,
     (gltf) => {
-      gltf.scene.position.set(0, 25, 0)
+      gltf.scene.position.set(0, 0, 1000)
       ship = gltf.scene
       const shipMesh = ship.children[0] as THREE.Mesh
       objectsGroup.add(ship)
