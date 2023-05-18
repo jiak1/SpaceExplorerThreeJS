@@ -12,7 +12,11 @@ import {
   updateBoostSpeed,
   updateBaseSpeed,
 } from "../animate/ship"
-import { outlinePass, toggleOrbitControls } from "../renderer/renderer"
+import {
+  outlinePass,
+  toggleOrbitControls,
+  toggleSkybox,
+} from "../renderer/renderer"
 import {
   planetCount,
   seed,
@@ -39,6 +43,7 @@ const config = {
   "Glow Thickness": outlinePass?.edgeThickness || 3,
   "Glow Colour": outlinePass?.visibleEdgeColor || "#fccb59",
   Seed: seed,
+  "Toggle Skybox": () => toggleSkybox(),
 }
 
 const resetObjects = () => {
@@ -91,6 +96,8 @@ const setupGUI = () => {
     .onChange((newVal) => {
       updateExP(newVal)
     })
+
+  cubeFolder.add(config, "Toggle Skybox")
 
   cubeFolder.open()
 

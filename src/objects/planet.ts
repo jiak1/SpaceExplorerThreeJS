@@ -170,8 +170,8 @@ const createPlanet = () => {
   const size = chance.integer({ min: 60, max: 300 })
   const geometry: THREE.SphereGeometry = new THREE.SphereGeometry(
     size,
-    size,
-    size
+    size * 2,
+    size * 2
   )
 
   // Create a new shader material for the face

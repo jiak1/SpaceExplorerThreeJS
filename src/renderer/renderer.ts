@@ -41,28 +41,34 @@ function onWindowResize() {
   render()
 }
 
-const setupSkybox = () => {
+let currentSkybox = 0
+
+const toggleSkybox = () => {
   const textureLoader = new THREE.CubeTextureLoader()
+  let textures = []
+  if (currentSkybox === 0) {
+    textures = [
+      "textures/corona_ft.png",
+      "textures/corona_bk.png",
+      "textures/corona_up.png",
+      "textures/corona_dn.png",
+      "textures/corona_rt.png",
+      "textures/corona_lf.png",
+    ]
+    currentSkybox = 1
+  } else {
+    textures = [
+      "textures/bkg1_front.png",
+      "textures/bkg1_back.png",
+      "textures/bkg1_top.png",
+      "textures/bkg1_bottom.png",
+      "textures/bkg1_right.png",
+      "textures/bkg1_left.png",
+    ]
+    currentSkybox = 0
+  }
 
-  const textures1 = [
-    "textures/corona_ft.png",
-    "textures/corona_bk.png",
-    "textures/corona_up.png",
-    "textures/corona_dn.png",
-    "textures/corona_rt.png",
-    "textures/corona_lf.png",
-  ]
-
-  const textures2 = [
-    "textures/bkg1_front.png",
-    "textures/bkg1_back.png",
-    "textures/bkg1_top.png",
-    "textures/bkg1_bottom.png",
-    "textures/bkg1_right.png",
-    "textures/bkg1_left.png",
-  ]
-
-  const textureCube = textureLoader.load(textures1)
+  const textureCube = textureLoader.load(textures)
   scene.background = textureCube
 }
 
@@ -116,7 +122,7 @@ const setupRenderer = () => {
 
   setupPostProcessing()
 
-  setupSkybox()
+  toggleSkybox()
 }
 
 const toggleOrbitControls = (enabled) => (controls.enabled = !enabled)
@@ -125,6 +131,7 @@ const toggleOrbitControls = (enabled) => (controls.enabled = !enabled)
 export {
   setupRenderer,
   camera,
+  toggleSkybox,
   renderer,
   scene,
   controls,
