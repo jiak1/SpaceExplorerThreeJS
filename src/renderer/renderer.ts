@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import * as THREE from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer"
@@ -30,7 +31,7 @@ window.addEventListener("keydown", (event) => {
 function render() {
   if (!isPaused) {
     const elapsedTime = clock.getElapsedTime()
-    renderer.render(scene, camera)
+    composer.render()
   }
 }
 

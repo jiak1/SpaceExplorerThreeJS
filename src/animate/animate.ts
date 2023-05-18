@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { composer, controls, render } from "../renderer/renderer"
+import { composer, controls, render, renderer } from "../renderer/renderer"
 import { stats } from "../gui/gui"
 import { animatePlanet, setupPlanetAnimation } from "./planet"
 import { animateShip, setupShipAnimation } from "./ship"
@@ -17,7 +17,7 @@ const animate = () => {
   animateShip()
   animateSun()
 
-  composer.render()
+  render()
 
   stats.update()
 }
