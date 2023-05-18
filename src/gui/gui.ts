@@ -17,6 +17,8 @@ import {
   updateCamX,
   updateCamY,
   updateCamZ,
+  toggleAnimateRaycasts,
+  animateRaycasts,
 } from "../animate/ship"
 import {
   outlinePass,
@@ -55,6 +57,7 @@ const config = {
   Seed: seed,
   "Toggle Skybox": () => toggleSkybox(),
   "Show Asteroids": showAsteroids,
+  "Enable Shooting": animateRaycasts,
 }
 
 const resetObjects = () => {
@@ -98,6 +101,13 @@ const setupGUI = () => {
     .listen()
     .onChange((newVal) => {
       updateExP(newVal)
+    })
+
+  cubeFolder
+    .add(config, "Enable Shooting")
+    .listen()
+    .onChange((newVal) => {
+      toggleAnimateRaycasts()
     })
 
   cubeFolder.add(config, "Toggle Skybox")

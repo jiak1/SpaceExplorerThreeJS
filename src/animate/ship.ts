@@ -7,6 +7,9 @@ import { keyboardKeys } from "./util/keyboard"
 
 const { throttle } = require("throttle-debounce")
 
+let animateRaycasts = true
+const toggleAnimateRaycasts = () => (animateRaycasts = !animateRaycasts)
+
 const raycaster = new THREE.Raycaster()
 
 let bullets: { mesh: THREE.Mesh; time: number; direction: THREE.Vector3 }[] = []
@@ -264,9 +267,11 @@ const animateShip = () => {
   if (!ship) return
 
   animateMove()
-  animateBullets()
-  runTryShoot()
-  runAnimateDeath()
+  if (animateRaycasts) {
+    animateBullets()
+    runTryShoot()
+    runAnimateDeath()
+  }
 }
 
 const setupShipAnimation = () => {
@@ -288,6 +293,8 @@ export {
   baseSpeed,
   updateBoostSpeed,
   updateBaseSpeed,
+  toggleAnimateRaycasts,
+  animateRaycasts,
   camX,
   camY,
   camZ,
