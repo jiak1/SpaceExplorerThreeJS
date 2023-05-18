@@ -31,6 +31,7 @@ import {
 } from "../objects/planet"
 import { rotateSpeed, updateRotateSpeed } from "../animate/planet"
 import { exP, updateExP } from "../objects/explosion"
+import { showAsteroids, toggleAsteroids } from "../objects/asteroids"
 
 let stats: Stats
 let gui: GUI
@@ -53,6 +54,7 @@ const config = {
   "Glow Colour": outlinePass?.visibleEdgeColor || "#fccb59",
   Seed: seed,
   "Toggle Skybox": () => toggleSkybox(),
+  "Show Asteroids": showAsteroids,
 }
 
 const resetObjects = () => {
@@ -120,6 +122,13 @@ const setupGUI = () => {
     .listen()
     .onChange((newVal) => {
       planetSeedChanged(newVal)
+    })
+  planetFolder
+    .add(config, "Show Asteroids")
+    .listen()
+    .onChange((newVal) => {
+      toggleAsteroids()
+      resetObjects()
     })
   planetFolder.open()
 

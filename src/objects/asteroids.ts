@@ -1,6 +1,10 @@
 import * as THREE from "three"
-import { scene } from "../renderer/renderer"
+import { objectsGroup, scene } from "../renderer/renderer"
 import { getRandomInt } from "../util/random"
+
+const showAsteroids = true
+
+const toggleAsteroids = () => !showAsteroids
 
 const vertexShader = `
   uniform float time;
@@ -99,66 +103,73 @@ const objectsPerClusterDifference = 10
 // Define the size of the area in which the clusters will be spawned
 const clusterAreaSize = 2500
 
-const asteroids = new THREE.Group()
+let asteroids = new THREE.Group()
 
-// Loop through the number of clusters
-for (let i = 0; i < numClusters; i++) {
-  // Generate a random position for the cluster within the cluster area
-  let radius
-  let angle
-  let validPosition = false
+const createAsteroids = () => {
+  asteroids = new THREE.Group()
 
-  while (!validPosition) {
-    radius = Math.random() * clusterAreaSize - clusterAreaSize / 2
-    angle = Math.random() * Math.PI * 2
-    if (radius >= 1000) {
-      validPosition = true
+  // Loop through the number of clusters
+  for (let i = 0; i < numClusters; i++) {
+    // Generate a random position for the cluster within the cluster area
+    let radius
+    let angle
+    let validPosition = false
+
+    while (!validPosition) {
+      radius = Math.random() * clusterAreaSize - clusterAreaSize / 2
+      angle = Math.random() * Math.PI * 2
+      if (radius >= 1000) {
+        validPosition = true
+      }
     }
+
+    const clusterX = Math.cos(angle) * radius
+    const clusterY = 0
+    const clusterZ = Math.sin(angle) * radius
+
+    // Create a new group to hold the objects in this cluster
+    const clusterGroup = new THREE.Group()
+
+    // Loop through the number of objects per cluster
+    for (
+      let j = 0;
+      j < objectsPerCluster - getRandomInt(0, objectsPerClusterDifference);
+      j++
+    ) {
+      // Generate a random position for the object within the cluster
+      const objectX = Math.random() * 100 - 5
+      const objectY = Math.random() * 100 - 5
+      const objectZ = Math.random() * 100 - 5
+
+      // Create a new instance of the object
+      const instance = asteroid.clone()
+
+      // Set the position of the object relative to the position of the cluster
+      instance.position.set(
+        clusterX + objectX,
+        clusterY + objectY,
+        clusterZ + objectZ
+      )
+
+      //  Roate the instance
+      instance.rotation.x = (Math.random() - 0.5) * 10
+      instance.rotation.y = (Math.random() - 0.5) * 10
+      instance.rotation.z = (Math.random() - 0.5) * 10
+
+      // Add the object to the cluster group
+      clusterGroup.add(instance)
+    }
+
+    // Add the cluster group to the main group
+    asteroids.add(clusterGroup)
+    objectsGroup.add(asteroids)
   }
-
-  const clusterX = Math.cos(angle) * radius
-  const clusterY = 0
-  const clusterZ = Math.sin(angle) * radius
-
-  // Create a new group to hold the objects in this cluster
-  const clusterGroup = new THREE.Group()
-
-  // Loop through the number of objects per cluster
-  for (
-    let j = 0;
-    j < objectsPerCluster - getRandomInt(0, objectsPerClusterDifference);
-    j++
-  ) {
-    // Generate a random position for the object within the cluster
-    const objectX = Math.random() * 100 - 5
-    const objectY = Math.random() * 100 - 5
-    const objectZ = Math.random() * 100 - 5
-
-    // Create a new instance of the object
-    const instance = asteroid.clone()
-
-    // Set the position of the object relative to the position of the cluster
-    instance.position.set(
-      clusterX + objectX,
-      clusterY + objectY,
-      clusterZ + objectZ
-    )
-
-    //  Roate the instance
-    instance.rotation.x = (Math.random() - 0.5) * 10
-    instance.rotation.y = (Math.random() - 0.5) * 10
-    instance.rotation.z = (Math.random() - 0.5) * 10
-
-    // Add the object to the cluster group
-    clusterGroup.add(instance)
-  }
-
-  // Add the cluster group to the main group
-  asteroids.add(clusterGroup)
 }
 
 const setupAsteroids = () => {
-  scene.add(asteroids)
+  if (showAsteroids) {
+    createAsteroids()
+  }
 }
 
-export { setupAsteroids, asteroids }
+export { setupAsteroids, asteroids, showAsteroids, toggleAsteroids }

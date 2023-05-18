@@ -131,8 +131,8 @@ const animateMove = () => {
 
     // RESET
     if (keyboardKeys.z || gamepadState.pause) {
-      ship.position.set(0, 25, 0) // Y needs to be 25 or cube will sink into ground
-      ship.rotation.set(0, 0, 1000)
+      ship.position.set(0, 0, 1000) // Y needs to be 25 or cube will sink into ground
+      ship.rotation.set(0, 0, 0)
     }
   }
 
