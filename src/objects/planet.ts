@@ -1,163 +1,134 @@
+/* eslint-disable prefer-destructuring */
 import * as THREE from "three"
-import { objectsGroup, scene } from "../renderer/renderer"
+import { objectsGroup } from "../renderer/renderer"
 import { getRandomInt } from "../util/random"
+
+const NoiseJS = require("noisejs")
 
 const Chance = require("chance")
 
-let planets: THREE.Mesh[] = []
-
-const planetShader = {
-  uniforms: {
-    scale: { type: "f", value: 0.0005 },
-    amplitude: { type: "f", value: 1 },
-    octaves: { type: "i", value: 5 },
-    offset: { type: "v2", value: new THREE.Vector2(0, 0) },
-    colors: {
-      type: "v3v",
-      value: [
-        new THREE.Vector3(20, 161, 43),
-        new THREE.Vector3(48, 204, 48),
-        new THREE.Vector3(28, 97, 232),
-        new THREE.Vector3(38, 69, 199),
-      ],
-    },
-  },
-
-  vertexShader: `
-    varying vec3 vPosition;
-
-    void main() {
-      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-      gl_Position = projectionMatrix * mvPosition;
-
-      vPosition = position;
-    }
-  `,
-
-  fragmentShader: `
-    uniform float scale;
-		uniform float amplitude;
-		uniform int octaves;
-
-    uniform vec2 offset;
-
-    uniform vec3 colors[4];
-
-    varying vec3 vPosition;
-
-    #define PERSISTENCE 0.5
-    #define LACUNARITY 2.0
-
-    vec3 hash3D(vec3 p) {
-      p = fract(p * 0.3183099 + vec3(0.1, 0.1, 0.1));
-      p += dot(p, p + vec3(123.4, 567.8, 987.6));
-      return fract(vec3(p.x * p.y, p.y * p.z, p.z * p.x));
-    }
-    
-    float noise3D(vec3 p) {
-      vec3 i = floor(p);
-      vec3 f = fract(p);
-    
-      vec3 u = f * f * (3.0 - 2.0 * f);
-    
-      float a = dot(hash3D(i + vec3(0.0, 0.0, 0.0)), f - vec3(0.0, 0.0, 0.0));
-      float b = dot(hash3D(i + vec3(1.0, 0.0, 0.0)), f - vec3(1.0, 0.0, 0.0));
-      float c = dot(hash3D(i + vec3(0.0, 1.0, 0.0)), f - vec3(0.0, 1.0, 0.0));
-      float d = dot(hash3D(i + vec3(1.0, 1.0, 0.0)), f - vec3(1.0, 1.0, 0.0));
-      float e = dot(hash3D(i + vec3(0.0, 0.0, 1.0)), f - vec3(0.0, 0.0, 1.0));
-      float g = dot(hash3D(i + vec3(1.0, 0.0, 1.0)), f - vec3(1.0, 0.0, 1.0));
-      float h = dot(hash3D(i + vec3(0.0, 1.0, 1.0)), f - vec3(0.0, 1.0, 1.0));
-      float k = dot(hash3D(i + vec3(1.0, 1.0, 1.0)), f - vec3(1.0, 1.0, 1.0));
-    
-      return mix(mix(mix(a, b, u.x), mix(c, d, u.x), u.y),
-                 mix(mix(e, g, u.x), mix(h, k, u.x), u.y), u.z);
-    }    
-
-    float noise(vec3 p) {
-      float amp = amplitude;
-      float frequency = 1.0;
-      float sum = 0.0;
-    
-      for (int i = 0; i < octaves; i++) {
-        sum += amp * noise3D(p * frequency + vec3(offset.x, offset.y, float(i)));
-        amp *= PERSISTENCE;
-        frequency *= LACUNARITY;
-      }
-    
-      return sum;
-    }    
-
-    void main() {
-			float n = 0.0;
-			vec3 p = vPosition;
-		
-			// Generate the Perlin noise texture
-			for (int i = 0; i < octaves; i++) {
-				n += noise(p * scale * pow(2.0, float(i)));
-			}
-		
-			// Remap noise values to mountain and hole heights
-			float height = n;
-		
-			// Map the height to colors
-			vec3 color = vec3(0.0);
-			if (height > 0.15) {
-        color = colors[0]/255.0;
-      } else if (height > 0.1) {
-        color = colors[1]/255.0;
-      } else if (height > -0.2) {
-        color = colors[2]/255.0;
-      } else {
-        color = colors[3]/255.0;
-      }      
-		
-			gl_FragColor = vec4(color, 1.0);
-		}
-  `,
-}
+let planets: THREE.Group[] = []
 
 const planetColours = [
   [
-    new THREE.Vector3(20, 161, 43),
-    new THREE.Vector3(48, 204, 48),
-    new THREE.Vector3(28, 97, 232),
-    new THREE.Vector3(38, 69, 199),
+    new THREE.Color(20, 161, 43),
+    new THREE.Color(48, 204, 48),
+    new THREE.Color(28, 97, 232),
+    new THREE.Color(38, 69, 199),
   ],
   [
-    new THREE.Vector3(152, 38, 73),
-    new THREE.Vector3(124, 132, 131),
-    new THREE.Vector3(113, 162, 182),
-    new THREE.Vector3(96, 178, 229),
+    new THREE.Color(152, 38, 73),
+    new THREE.Color(124, 132, 131),
+    new THREE.Color(113, 162, 182),
+    new THREE.Color(96, 178, 229),
   ],
   [
-    new THREE.Vector3(255, 137, 102),
-    new THREE.Vector3(229, 68, 109),
-    new THREE.Vector3(248, 244, 227),
-    new THREE.Vector3(112, 108, 97),
+    new THREE.Color(255, 137, 102),
+    new THREE.Color(229, 68, 109),
+    new THREE.Color(248, 244, 227),
+    new THREE.Color(112, 108, 97),
   ],
   [
-    new THREE.Vector3(206, 132, 173),
-    new THREE.Vector3(206, 150, 166),
-    new THREE.Vector3(212, 203, 179),
-    new THREE.Vector3(210, 224, 191),
+    new THREE.Color(206, 132, 173),
+    new THREE.Color(206, 150, 166),
+    new THREE.Color(212, 203, 179),
+    new THREE.Color(210, 224, 191),
   ],
   [
-    new THREE.Vector3(247, 219, 167),
-    new THREE.Vector3(241, 171, 134),
-    new THREE.Vector3(197, 123, 87),
-    new THREE.Vector3(30, 45, 47),
+    new THREE.Color(247, 219, 167),
+    new THREE.Color(241, 171, 134),
+    new THREE.Color(197, 123, 87),
+    new THREE.Color(30, 45, 47),
   ],
   [
-    new THREE.Vector3(158, 0, 49),
-    new THREE.Vector3(142, 0, 49),
-    new THREE.Vector3(119, 0, 88),
-    new THREE.Vector3(96, 0, 71),
+    new THREE.Color(158, 0, 49),
+    new THREE.Color(142, 0, 49),
+    new THREE.Color(119, 0, 88),
+    new THREE.Color(96, 0, 71),
   ],
 ]
 
-let planetCount = 15
+let planetCount = 2
 let seed = getRandomInt(0, 10000)
 let chance = new Chance(seed)
+let noiseGenerator = new NoiseJS.Noise(seed)
+
+// Source (https://observablehq.com/@toja/procedural-texturing-w-perlin-noise)
+// This function helps map a 2d texture to a 3d sphere
+function getSphereCoordinates(u, v) {
+  const lon = ((u * 360 - 180) * Math.PI) / 180
+  const lat = ((v * 180 - 90) * Math.PI) / 180
+
+  return [
+    (Math.cos(lat) * Math.cos(lon) + 1) / 2,
+    (Math.sin(lat) + 1) / 2,
+    (Math.cos(lat) * Math.sin(lon) + 1) / 2,
+  ]
+}
+
+function generatePlanetMaps(
+  width: number,
+  height: number,
+  scale: number,
+  xOffset: number,
+  yOffset: number,
+  colors: THREE.Color[]
+): THREE.DataTexture[] {
+  const size = width * height
+  const textureMap = new Uint8Array(4 * size)
+  const bumpMap = new Uint8Array(4 * size)
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const coords = getSphereCoordinates(
+        (x + xOffset) / (width - 1),
+        (y + yOffset) / (height - 1)
+      )
+      const value = noiseGenerator.simplex3(
+        coords[0] / scale,
+        coords[1] / scale,
+        coords[2] / scale
+      )
+      const index = (y * width + x) * 4
+
+      const boundedPerlin = (value + 1) / 2
+
+      let col = new THREE.Color("#FFFFFF").lerp(
+        new THREE.Color("#000000"),
+        boundedPerlin
+      )
+
+      bumpMap[index] = col.r * 255
+      bumpMap[index + 1] = col.g * 255
+      bumpMap[index + 2] = col.b * 255
+      bumpMap[index + 3] = 255
+
+      col = new THREE.Color("#ffffff")
+      if (value > 0.15) {
+        col = colors[0]
+      } else if (value > 0.1) {
+        col = colors[1]
+      } else if (value > -0.2) {
+        col = colors[2]
+      } else {
+        col = colors[3]
+      }
+
+      textureMap[index] = col.r
+      textureMap[index + 1] = col.g
+      textureMap[index + 2] = col.b
+      textureMap[index + 3] = 255
+    }
+  }
+
+  const colorTexture = new THREE.DataTexture(textureMap, width, height)
+  colorTexture.needsUpdate = true
+
+  const bumpTexture = new THREE.DataTexture(bumpMap, width, height)
+  bumpTexture.needsUpdate = true
+
+  return [colorTexture, bumpTexture]
+}
 
 const updatePlanetCount = (newVal) => (planetCount = newVal)
 
@@ -174,42 +145,74 @@ const createPlanet = () => {
     size * 2
   )
 
-  // Create a new shader material for the face
-  const planetMaterial = new THREE.ShaderMaterial({
-    uniforms: planetShader.uniforms,
-    vertexShader: planetShader.vertexShader,
-    fragmentShader: planetShader.fragmentShader,
-  })
+  const width = 500 // Width of the bump map
+  const height = 250 // Height of the bump map
 
-  planetMaterial.uniforms.colors.value = getColours()
+  const planetGroup = new THREE.Group()
 
-  planetMaterial.uniforms.amplitude.value = chance.floating({
-    min: 0.5,
-    max: 3,
-  })
-
-  planetMaterial.uniforms.offset.value = new THREE.Vector2(
+  const chosenColors = getColours()
+  const textures = generatePlanetMaps(
+    width,
+    height,
+    0.5,
     chance.integer({ min: -1000000, max: 1000000 }),
-    chance.integer({ min: -1000000, max: 1000000 })
+    chance.integer({ min: -1000000, max: 1000000 }),
+    chosenColors
   )
 
-  // Create a mesh with the box geometry and the array of materials
-  return new THREE.Mesh(geometry, planetMaterial.clone())
+  const planetMaterial = new THREE.MeshPhongMaterial({
+    map: textures[0],
+    bumpScale: 30,
+    bumpMap: textures[1],
+    flatShading: true,
+  })
+
+  const planetMesh = new THREE.Mesh(geometry, planetMaterial.clone())
+  planetMesh.name = "Planet Mesh"
+  planetGroup.add(planetMesh)
+
+  const spawnRing = chance.integer({ min: 0, max: 100 })
+  if (spawnRing < 20) {
+    const ringColor =
+      chosenColors[chance.integer({ min: 0, max: chosenColors.length - 1 })]
+
+    const ringMaterial = new THREE.MeshPhongMaterial({
+      color: new THREE.Color(
+        ringColor.r / 255,
+        ringColor.g / 255,
+        ringColor.b / 255
+      ),
+    })
+
+    const ringGeometry = new THREE.TorusGeometry(
+      size * 1.2,
+      size * 0.1,
+      size,
+      size
+    )
+    const planetRing = new THREE.Mesh(ringGeometry, ringMaterial.clone())
+    planetRing.rotation.x = Math.PI / 2
+    planetRing.name = "Planet Ring"
+    planetGroup.add(planetRing)
+  }
+
+  return planetGroup
 }
 
 const setupPlanets = () => {
   planets = []
   chance = new Chance(seed)
+  noiseGenerator = new NoiseJS.Noise(seed)
 
   for (let i = 1; i <= planetCount; i++) {
-    const planet = createPlanet()
-    planet.name = `Planet  ${i}`
+    const planetGroup = createPlanet()
+    planetGroup.name = `Planet Group  ${i}`
 
     const y = getRandomInt(-50, 50)
-    planet.position.y = y
+    planetGroup.position.y = y
 
-    objectsGroup.add(planet)
-    planets.push(planet)
+    objectsGroup.add(planetGroup)
+    planets.push(planetGroup)
   }
 }
 

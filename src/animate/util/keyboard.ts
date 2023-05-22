@@ -12,7 +12,6 @@ const listener = new GamepadListener({
 })
 
 listener.on("gamepad:button", (event) => {
-  console.log("working")
   const {
     index, // Gamepad index: Number [0-3].
     gamepad, // Native Gamepad object.

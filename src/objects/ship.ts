@@ -16,7 +16,6 @@ const setupShip = () => {
       objectsGroup.add(ship)
       shipMesh.material = new THREE.MeshBasicMaterial({ color: "#ADD8E6" })
       shipMesh.rotateZ(Math.PI)
-      console.log(ship)
     },
     (xhr) => {
       // console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`)

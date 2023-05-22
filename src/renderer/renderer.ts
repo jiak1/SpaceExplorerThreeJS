@@ -196,8 +196,11 @@ const setupRenderer = () => {
 
   window.addEventListener("resize", onWindowResize, false)
 
-  const light = new THREE.AmbientLight(0xffc0cb, 1) // soft white light
+  const light = new THREE.AmbientLight(0xffc0cb, 0.5) // soft white light
   scene.add(light)
+
+  const pointLight = new THREE.PointLight(0xffffff, 1)
+  scene.add(pointLight)
 
   setupPostProcessing()
 
