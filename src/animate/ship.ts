@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import * as THREE from "three"
 
 import { triggerExplosion, triggerExhaust } from "../objects/explosion"
@@ -89,6 +90,7 @@ const animateMove = () => {
     // Check if the boost key (B) is pressed
     if ((gamepadState.boost || keyboardKeys.b) && !isBoosting) {
       isBoosting = true
+      camZ = 150
       boostTimer = 5 // Set the boost timer to 5 seconds
     }
 
@@ -97,6 +99,7 @@ const animateMove = () => {
       boostTimer -= seconds
       if (boostTimer <= 0) {
         isBoosting = false
+        camZ = 100
       }
     }
 

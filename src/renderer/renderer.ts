@@ -40,6 +40,31 @@ buttonList.appendChild(resumeButton)
 restartButton.innerHTML = "Restart"
 buttonList.appendChild(restartButton)
 
+// ...
+
+const keyBindingsBox = document.createElement("div")
+keyBindingsBox.id = "key-bindings-box"
+keyBindingsBox.innerHTML =
+  "W/S = Move Forward or Back<br> A/D = Face Left or Right<br>Q/E = Rotate Ship Left/Right<br>R/F = Rotate Ship Up/Down<br>K/L = Move Ship Up/Down<br>B = Boost<br> Z = Reset Position<br> Space = Shoot<br> P = Pause"
+document.body.appendChild(keyBindingsBox)
+
+// Style the key bindings box using CSS
+keyBindingsBox.style.position = "absolute"
+keyBindingsBox.style.top = "50px"
+keyBindingsBox.style.left = "0px"
+keyBindingsBox.style.padding = "10px"
+keyBindingsBox.style.backgroundColor = "rgba(0, 0, 0, 0.5)"
+keyBindingsBox.style.color = "#fff"
+keyBindingsBox.style.fontFamily = "Arial, sans-serif"
+keyBindingsBox.style.display = "none"
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "p" || event.key === "Escape") {
+    keyBindingsBox.style.display =
+      keyBindingsBox.style.display === "none" ? "block" : "none"
+  }
+})
+
 // Style the pause menu using CSS
 pauseMenu.style.position = "fixed"
 pauseMenu.style.top = "50%"
@@ -92,7 +117,9 @@ resumeButton.addEventListener("click", () => {
 restartButton.addEventListener("click", () => {
   // Perform restart action
   togglePauseMenu()
-  pause()
+  // pause()
+  // eslint-disable-next-line no-restricted-globals
+  location.reload()
 })
 
 // Toggle the pause state. Can use both "p" or "Escape" keys
