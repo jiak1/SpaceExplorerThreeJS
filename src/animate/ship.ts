@@ -76,7 +76,7 @@ const animateMove = () => {
     const cubeRotator = (Math.PI / 2) * seconds
 
     // Update gamepad input state
-    const gamepad = navigator.getGamepads()[0] // Assuming only one gamepad is connected
+    const gamepad = navigator.getGamepads()[0]
     if (gamepad) {
       for (let i = 0; i < gamepad.buttons.length; i++) {
         const button = gamepad.buttons[i]

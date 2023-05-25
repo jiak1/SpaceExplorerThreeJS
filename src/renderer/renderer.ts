@@ -117,7 +117,6 @@ resumeButton.addEventListener("click", () => {
 restartButton.addEventListener("click", () => {
   // Perform restart action
   togglePauseMenu()
-  // pause()
   // eslint-disable-next-line no-restricted-globals
   location.reload()
 })
