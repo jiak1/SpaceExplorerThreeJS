@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import * as THREE from "three"
 
 import { triggerExplosion, triggerExhaust } from "../objects/explosion"
@@ -75,7 +76,7 @@ const animateMove = () => {
     const cubeRotator = (Math.PI / 2) * seconds
 
     // Update gamepad input state
-    const gamepad = navigator.getGamepads()[0] // Assuming only one gamepad is connected
+    const gamepad = navigator.getGamepads()[0]
     if (gamepad) {
       for (let i = 0; i < gamepad.buttons.length; i++) {
         const button = gamepad.buttons[i]
@@ -89,6 +90,7 @@ const animateMove = () => {
     // Check if the boost key (B) is pressed
     if ((gamepadState.boost || keyboardKeys.b) && !isBoosting) {
       isBoosting = true
+      camZ = 150
       boostTimer = 5 // Set the boost timer to 5 seconds
     }
 
@@ -97,6 +99,7 @@ const animateMove = () => {
       boostTimer -= seconds
       if (boostTimer <= 0) {
         isBoosting = false
+        camZ = 100
       }
     }
 
