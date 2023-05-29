@@ -14,3 +14,22 @@ npm run dev
 - Jack Donaldson
 - Joshua Karadaghian
 - Michael Ning
+
+# Changes Since Class Demonstration
+
+Michael Ning
+
+- Destroying Asteroids
+- Interactive Pause Menu
+- Asteroid Spinning Animations
+
+Joshua Karadaghian
+
+- Reset Function
+- Controls Info Panel
+- Boost Camera Layout Change
+
+Jack Donaldson
+
+- Planet Bump Mapping
+- Planet Rings
