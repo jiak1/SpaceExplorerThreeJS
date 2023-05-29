@@ -19,21 +19,48 @@ npm run dev
 - Joshua Karadaghian
 - Michael Ning
 
-# Changes Since Class Demonstration
+# Contributions
 
-Michael Ning
+## Michael Ning
+
+### Original Contributions
+
+- Added Asteroids
+
+### New Contributions
 
 - Destroying Asteroids
 - Interactive Pause Menu
 - Asteroid Spinning Animations
 
-Joshua Karadaghian
+## Joshua Karadaghian
+
+### Original Contributions
+
+- Ship Movement
+- Gamepad Support
+- Ship Model Changing
+- Ship Boosting
+- Skybox
+
+### New Contributions
 
 - Reset Function
 - Controls Info Panel
 - Boost Camera Layout Change
 
-Jack Donaldson
+## Jack Donaldson
+
+### Original Contributions
+
+- Procedually Generated Planets
+- Solar System Generation, Placement & Animation
+- Ship Shooting
+- Modular Particle System + Bullet Explosions
+- Planet Collisions & Ship Respawning
+- Sun Generation + Outline Post Processing
+
+### New Contributions
 
 - Planet Bump Mapping
 - Planet Rings
