@@ -2,6 +2,10 @@
 
 The project is hosted live at https://graphics.jackdonaldson.net
 
+Github Repo: https://github.com/jiak1/SpaceExplorerThreeJS
+
+# Running Locally
+
 To setup the repo locally, make sure you have npm locally & run the following in a terminal:
 
 ```bash
